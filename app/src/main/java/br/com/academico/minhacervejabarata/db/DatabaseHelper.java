@@ -13,10 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.academico.minhacervejabarata.beans.Cesta;
+import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.beans.ItensCesta;
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.beans.Produto;
-import br.com.academico.minhacervejabarata.beans.Supermercado;
 import br.com.academico.minhacervejabarata.beans.Tipo;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_CESTA_ID = "idCesta";
 
     // Table Create Statements
-    // Supermercado table create statement
+    // Estabelecimento table create statement
     private static final String CREATE_TABLE_SUPERMERCADO = "CREATE TABLE "
             + TABLE_SUPERMERCADO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + TABLE_SUPERMERCADO_COLUNA_NOME + " TEXT,"
@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Table Create Statements
-    // Supermercado table create statement
+    // Estabelecimento table create statement
     private static final String CREATE_TABLE_TIPO = "CREATE TABLE "
             + TABLE_TIPO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + TABLE_TIPO_COLUNA_DESCRICAO + " TEXT,"
@@ -101,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Table Create Statements
-    // Supermercado table create statement
+    // Estabelecimento table create statement
     private static final String CREATE_TABLE_CESTA = "CREATE TABLE "
             + TABLE_CESTA + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + TABLE_CESTA_COLUNA_NOME + " TEXT,"
@@ -144,35 +144,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    /*
-     * Creating a supermercado
-     */
-    public Supermercado createSupermercado(Supermercado supermercado/*, long[] tag_ids*/) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(TABLE_SUPERMERCADO_COLUNA_NOME, supermercado.getNome());
-        values.put(TABLE_SUPERMERCADO_COLUNA_ENDERECO, supermercado.getEndereco());
-
-        // insert row
-        Long id = db.insert(TABLE_SUPERMERCADO, null, values);
-
-        // assigning tags to todo
-        /*for (long tag_id : tag_ids) {
-            createTodoTag(todo_id, tag_id);
-        }*/
-
-
-        supermercado.setId(id.intValue());
-
-        return supermercado;
-
-    }
 
     /*
      * get single supermercado
      */
-    public Supermercado getSupermercado(int id) {
+    public Estabelecimento getSupermercado(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_SUPERMERCADO + " WHERE "
@@ -185,41 +161,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        Supermercado supermercado = new Supermercado();
-        supermercado.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        supermercado.setNome((c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_NOME))));
-        supermercado.setEndereco(c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_ENDERECO)));
+        Estabelecimento estabelecimento = new Estabelecimento();
+        estabelecimento.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        estabelecimento.setNome((c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_NOME))));
+        estabelecimento.setEndereco(c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_ENDERECO)));
 
-        return supermercado;
+        return estabelecimento;
     }
 
-    /*
-     * getting all supermercado
-     * */
-    public List<Supermercado> getAllSupermercado() {
-        List<Supermercado> supermercados = new ArrayList<Supermercado>();
-        String selectQuery = "SELECT  * FROM " + TABLE_SUPERMERCADO;
-
-        Log.e(LOG, selectQuery);
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            do {
-                Supermercado td = new Supermercado();
-                td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                td.setNome((c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_NOME))));
-                td.setEndereco(c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_ENDERECO)));
-
-                // adding to supermercados list
-                supermercados.add(td);
-            } while (c.moveToNext());
-        }
-
-        return supermercados;
-    }
 
     //==================================================================================================
 
@@ -372,7 +321,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_SUPERMERCADO_ID, produto.getSupermercado().getId());
+        values.put(KEY_SUPERMERCADO_ID, produto.getEstabelecimento().getId());
         values.put(KEY_MARCA_ID, produto.getMarca().getId());
         values.put(KEY_TIPO_ID, produto.getTipo().getId());
         values.put(TABLE_PRODUTO_COLUNA_VALOR, produto.getValor());
@@ -406,7 +355,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Produto produto = new Produto();
         produto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 
-        produto.setSupermercado(getSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID)))));
+        produto.setEstabelecimento(getSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID)))));
         produto.setMarca(getMarca((c.getInt(c.getColumnIndex(KEY_MARCA_ID)))));
         produto.setTipo(getTipo((c.getInt(c.getColumnIndex(KEY_TIPO_ID)))));
         produto.setValor((c.getFloat(c.getColumnIndex(TABLE_PRODUTO_COLUNA_VALOR))));
@@ -443,7 +392,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Produto produto = new Produto();
                 produto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 
-                produto.setSupermercado(getSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID)))));
+                produto.setEstabelecimento(getSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID)))));
                 produto.setMarca(getMarca((c.getInt(c.getColumnIndex(KEY_MARCA_ID)))));
                 produto.setTipo(getTipo((c.getInt(c.getColumnIndex(KEY_TIPO_ID)))));
                 produto.setValor((c.getFloat(c.getColumnIndex(TABLE_PRODUTO_COLUNA_VALOR))));

@@ -17,4 +17,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/addMercado"
+        android:layout_width="395dp"
+        android:layout_height="107dp"
+        android:text="add mercado"
+        android:onClick="addMercado"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="40dp" />
+
 </android.support.constraint.ConstraintLayout>

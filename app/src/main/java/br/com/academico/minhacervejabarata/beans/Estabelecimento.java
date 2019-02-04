@@ -1,21 +1,21 @@
 package br.com.academico.minhacervejabarata.beans;
 
-public class Supermercado {
+public class Estabelecimento {
 
     private int id;
     private String nome;
     private String endereco;
 
-    public Supermercado() {
+    public Estabelecimento() {
 
     }
 
-    public Supermercado(String nome, String endereco) {
+    public Estabelecimento(String nome, String endereco) {
         this.nome = nome;
         this.endereco = endereco;
     }
 
-    public Supermercado(int id, String nome, String endereco) {
+    public Estabelecimento(int id, String nome, String endereco) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;

@@ -7,29 +7,29 @@ public class Produto {
     private int idTipo;
     private float valor;
 
-    private Supermercado supermercado;
+    private Estabelecimento estabelecimento;
     private Marca marca;
     private Tipo tipo;
 
-    public Produto(Supermercado supermercado, Marca marca, Tipo tipo) {
-        this.supermercado = supermercado;
+    public Produto(Estabelecimento estabelecimento, Marca marca, Tipo tipo) {
+        this.estabelecimento = estabelecimento;
         this.marca = marca;
         this.tipo = tipo;
     }
 
-    public Produto(Supermercado supermercado, Marca marca, Tipo tipo, float valor) {
-        this.supermercado = supermercado;
+    public Produto(Estabelecimento estabelecimento, Marca marca, Tipo tipo, float valor) {
+        this.estabelecimento = estabelecimento;
         this.marca = marca;
         this.tipo = tipo;
         this.valor = valor;
     }
 
-    public Supermercado getSupermercado() {
-        return supermercado;
+    public Estabelecimento getEstabelecimento() {
+        return estabelecimento;
     }
 
-    public void setSupermercado(Supermercado supermercado) {
-        this.supermercado = supermercado;
+    public void setEstabelecimento(Estabelecimento estabelecimento) {
+        this.estabelecimento = estabelecimento;
     }
 
     public Marca getMarca() {
