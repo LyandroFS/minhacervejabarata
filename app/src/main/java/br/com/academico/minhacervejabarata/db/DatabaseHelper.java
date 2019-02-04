@@ -195,33 +195,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return marca;
     }
 
-    /*
-     * getting all marca
-     * */
-    public List<Marca> getAllMarca() {
-        List<Marca> marcas = new ArrayList<Marca>();
-        String selectQuery = "SELECT  * FROM " + TABLE_SUPERMERCADO;
-
-        Log.e(LOG, selectQuery);
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            do {
-                Marca td = new Marca();
-                td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                td.setNome((c.getString(c.getColumnIndex(TABLE_MARCA_COLUNA_NOME))));
-
-                // adding to supermercados list
-                marcas.add(td);
-            } while (c.moveToNext());
-        }
-
-        return marcas;
-    }
-
     //==================================================================================================
 
     /*

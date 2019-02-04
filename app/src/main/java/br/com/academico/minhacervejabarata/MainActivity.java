@@ -227,7 +227,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addMarca(View view) {
-        Intent intent = new Intent(this, AddMarcaActivity.class);
+        //Intent intent = new Intent(this, AddMarcaActivity.class);
+        Intent intent = new Intent(this, MarcaActivity.class);
+
         startActivity(intent);
     }
 }
