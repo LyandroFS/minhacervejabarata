@@ -21,15 +21,10 @@ public class MarcaDAO {
         db = new DatabaseHelper(context).getWritableDatabase();
     }
 
-    public Marca createMarca(Marca marca) {
+    public boolean createMarca(Marca marca) {
         ContentValues values = new ContentValues();
         values.put(TABLE_MARCA_COLUNA_NOME, marca.getNome());
 
-        // insert row
-        Long id = db.insert(TABLE_MARCA, null, values);
-
-        marca.setId(id.intValue());
-
-        return marca;
+        return db.insert(TABLE_MARCA, null, values) > 0;
     }
 }

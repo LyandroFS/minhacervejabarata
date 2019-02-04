@@ -22,24 +22,14 @@ public class EstabelecimentoDAO {
     public EstabelecimentoDAO(Context context){
         db = new DatabaseHelper(context).getWritableDatabase();
     }
-    public Estabelecimento createEstabelecimento(Estabelecimento estabelecimento/*, long[] tag_ids*/) {
+    public boolean createEstabelecimento(Estabelecimento estabelecimento/*, long[] tag_ids*/) {
 
         ContentValues values = new ContentValues();
         values.put(TABLE_SUPERMERCADO_COLUNA_NOME, estabelecimento.getNome());
         values.put(TABLE_SUPERMERCADO_COLUNA_ENDERECO, estabelecimento.getEndereco());
 
         // insert row
-        Long id = db.insert(TABLE_SUPERMERCADO, null, values);
-
-        // assigning tags to todo
-        /*for (long tag_id : tag_ids) {
-            createTodoTag(todo_id, tag_id);
-        }*/
-
-
-        estabelecimento.setId(id.intValue());
-
-        return estabelecimento;
+        return db.insert(TABLE_SUPERMERCADO, null, values) > 0;
 
     }
 

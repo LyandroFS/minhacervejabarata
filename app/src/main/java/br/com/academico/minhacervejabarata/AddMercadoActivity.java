@@ -1,5 +1,6 @@
 package br.com.academico.minhacervejabarata;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,7 +32,12 @@ public class AddMercadoActivity extends AppCompatActivity {
         String nome = nomeText.getText().toString();
         String endereco = enderecoText.getText().toString();
         Estabelecimento estabelecimento = new Estabelecimento(nome,endereco);
-        estabelecimentoDAO.createEstabelecimento(estabelecimento);
+        if (estabelecimentoDAO.createEstabelecimento(estabelecimento))
+            Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        else
+            Snackbar.make(view, "Erro ao inserir item!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
 
     }
 }

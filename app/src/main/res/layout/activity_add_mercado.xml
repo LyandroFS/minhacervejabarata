@@ -10,34 +10,37 @@
         android:id="@+id/nome"
         android:layout_width="395dp"
         android:layout_height="75dp"
-        android:layout_marginBottom="612dp"
+        android:layout_marginBottom="544dp"
         android:ems="10"
         android:hint="Nome"
         android:inputType="textNoSuggestions|textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/endereco"
         android:layout_width="395dp"
         android:layout_height="75dp"
-        android:layout_marginBottom="492dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:hint="Endereço"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nome" />
 
     <Button
         android:id="@+id/salvarBtn"
         android:layout_width="395dp"
         android:layout_height="86dp"
-        android:layout_marginBottom="320dp"
+        android:layout_marginTop="92dp"
         android:onClick="salvarMercado"
         android:text="SALVAR"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endereco" />
 </android.support.constraint.ConstraintLayout>
