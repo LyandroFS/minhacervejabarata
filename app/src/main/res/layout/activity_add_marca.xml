@@ -4,27 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddMercadoActivity">
+    tools:context=".AddMarcaActivity">
 
     <EditText
-        android:id="@+id/nome"
+        android:id="@+id/nomeText"
         android:layout_width="395dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="612dp"
+        android:layout_height="92dp"
+        android:layout_marginBottom="548dp"
         android:ems="10"
         android:hint="Nome"
-        android:inputType="textNoSuggestions|textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/endereco"
-        android:layout_width="395dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="492dp"
-        android:ems="10"
-        android:hint="Endereço"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,10 +21,10 @@
     <Button
         android:id="@+id/salvarBtn"
         android:layout_width="395dp"
-        android:layout_height="86dp"
-        android:layout_marginBottom="320dp"
-        android:onClick="salvarMercado"
+        android:layout_height="87dp"
+        android:layout_marginBottom="360dp"
         android:text="SALVAR"
+        android:onClick="addMarca"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

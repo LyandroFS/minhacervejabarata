@@ -31,7 +31,7 @@ public class AddMercadoActivity extends AppCompatActivity {
         String nome = nomeText.getText().toString();
         String endereco = enderecoText.getText().toString();
         Estabelecimento estabelecimento = new Estabelecimento(nome,endereco);
-        estabelecimento = estabelecimentoDAO.createEstabelecimento(estabelecimento);
-        
+        estabelecimentoDAO.createEstabelecimento(estabelecimento);
+
     }
 }

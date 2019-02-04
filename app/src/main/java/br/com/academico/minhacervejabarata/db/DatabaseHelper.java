@@ -173,23 +173,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //==================================================================================================
 
     /*
-     * Creating a marca
-     */
-    public Marca createMarca(Marca marca) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(TABLE_MARCA_COLUNA_NOME, marca.getNome());
-
-        // insert row
-        Long id = db.insert(TABLE_MARCA, null, values);
-
-        marca.setId(id.intValue());
-
-        return marca;
-    }
-
-    /*
      * get single marca
      */
     public Marca getMarca(int id) {

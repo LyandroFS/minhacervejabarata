@@ -10,6 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".AddMarcaActivity"
+            android:label="@string/activity_add_marca"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.academico.minhacervejabarata.MainActivity" />
+    </activity>
+        <activity
             android:name=".AddMercadoActivity"
             android:label="@string/activity_add_mercado"
             android:parentActivityName=".MainActivity">

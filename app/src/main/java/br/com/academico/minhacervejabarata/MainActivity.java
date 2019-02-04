@@ -221,8 +221,13 @@ public class MainActivity extends AppCompatActivity
     public void addCerveja(View view) {
     }
 
-    public void addMercado(View view) {
+    public void addEstabelecimento(View view) {
         Intent intent = new Intent(this, AddMercadoActivity.class);
+        startActivity(intent);
+    }
+
+    public void addMarca(View view) {
+        Intent intent = new Intent(this, AddMarcaActivity.class);
         startActivity(intent);
     }
 }
