@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,13 +17,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import br.com.academico.minhacervejabarata.beans.Cesta;
+import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.beans.ItensCesta;
+import br.com.academico.minhacervejabarata.beans.Marca;
+import br.com.academico.minhacervejabarata.beans.Produto;
+import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.listItens.CestaAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseHelper db;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,42 +48,46 @@ public class MainActivity extends AppCompatActivity
 
 
 
-//       Estabelecimento supermercado = new Estabelecimento("Bompreço", "Brotas");
-//        supermercado = db.createSupermercado(supermercado);
-//
-//
-//        Estabelecimento supermercado2 = new Estabelecimento("Extra", "Paralela");
-//        supermercado2 = db.createSupermercado(supermercado2);
-//
-//        Log.d("Tag CountSupermercado", "Tag Count: " + db.getAllSupermercado().size());
-//
-//
-//
-//        Marca marca1 = new Marca("Skol");
-//        marca1 = db.createMarca(marca1);
-//
-//        Marca marca2 = new Marca("Devassa");
-//        marca2 = db.createMarca(marca2);
-//
-//        Log.d("Tag CountMarca", "Tag Count: " + db.getAllMarca().size());
-//
-//
-//        Tipo tipo1 = new Tipo("Garrafa", 600);
-//        tipo1 = db.createTipo(tipo1);
-//
-//        Tipo tipo2 = new Tipo("Garrafa", 250);
-//        tipo2 = db.createTipo(tipo2);
-//
-//        Log.d("Tag CountTipo", "Tag Count: " + db.getAllTipo().size());
-//
-//        Produto produto1 = new Produto(supermercado,marca1,tipo1, 2.20f);
-//        db.createProduto(produto1);
-//        Produto produto2 = new Produto(supermercado2,marca2,tipo1, 2.40f);
-//        db.createProduto(produto2);
-//
-//        Log.d("Tag CountProduto", "Tag Count: " + db.getAllProduto().size());
-//
-//
+       /* Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
+        estabelecimento = db.createEstabelecimento(estabelecimento);
+
+
+        Estabelecimento estabelecimento2 = new Estabelecimento("Extra", "Paralela");
+        estabelecimento2 = db.createEstabelecimento(estabelecimento2);
+
+        Log.d("Tag CountSupermercado", "Tag Count: " + db.getAllEstabelecimentos().size());
+
+
+
+          Marca marca1 = new Marca("Skol");
+          marca1 = db.createMarca(marca1);
+
+          Marca marca2 = new Marca("Devassa");
+            marca2 = db.createMarca(marca2);
+
+        Log.d("Tag CountMarca", "Tag Count: " + db.getAllMarca().size());
+
+
+        Tipo tipo1 = new Tipo("Garrafa", 600);
+        tipo1 = db.createTipo(tipo1);
+
+        Tipo tipo2 = new Tipo("Garrafa", 250);
+        tipo2 = db.createTipo(tipo2);
+
+        Log.d("Tag CountTipo", "Tag Count: " + db.getAllTipo().size());
+
+        Produto produto1 = new Produto(estabelecimento,marca1,tipo1, 5.20f);
+        db.createProduto(produto1);
+
+        Produto produto2 = new Produto(estabelecimento2,marca2,tipo1, 2.40f);
+        db.createProduto(produto2);
+
+        Produto produto3 = new Produto(estabelecimento,marca1,tipo2, 3.60f);
+        db.createProduto(produto3);
+
+        Log.d("Tag CountProduto", "Tag Count: " + db.getAllProduto().size());*/
+
+
 //        for(Produto p : db.getAllProduto()){
 //            System.out.println("Estabelecimento: "+p.getEstabelecimento().getNome());
 //            System.out.println("Marca: "+p.getMarca().getNome());
@@ -108,20 +124,24 @@ public class MainActivity extends AppCompatActivity
 
 
 
+      /*  Cesta cesta = new Cesta("Cesta de Final de Semana");
+        cesta = db.createCesta(cesta);
+
+        Cesta cesta2 = new Cesta("Cesta de Aniversario");
+        cesta2 = db.createCesta(cesta2);*/
 
 
-
-        Log.d("Tag CountItensCesta", "Tag Count: " + db.getAllItensCesta().size());
+        //Log.d("Tag CountItensCesta", "Tag Count: " + db.getAllCesta().size());
 
         /*Cesta ce = db.getCesta(2);
         System.out.println("Nome: "+ce.getNome());
         System.out.println("DAta: "+ce.getDate());*/
 
-        for(ItensCesta ic : db.getAllItensCestaById(2)){
+       /* for(ItensCesta ic : db.getAllItensCestaById(2)){
             System.out.println("NOME SUPERMERCADO: "+ic.getProduto().getEstabelecimento().getNome());
             System.out.println("MARCA: "+ic.getProduto().getMarca().getNome());
             System.out.println("===========================================");
-        }
+        }*/
 
 
        /* for(ItensCesta ic : ce.getItensCesta()){
@@ -142,12 +162,32 @@ public class MainActivity extends AppCompatActivity
         }*/
 
 
+
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new CestaAdapter(getApplicationContext(),this,db.getAllCesta());
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        //db.getAllItensCesta();
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(getApplicationContext(), CestaActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -200,7 +240,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Intent intent = new Intent(this, AddMercadoActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

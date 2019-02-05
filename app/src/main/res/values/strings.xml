@@ -10,4 +10,5 @@
     <string name="activity_add_mercado">Add Mercado Activity</string>
     <string name="activity_add_marca">Add Marca Activity</string>
     <string name="title_activity_marca">Marca</string>
+    <string name="title_activity_cesta">CestaActivity</string>
 </resources>

@@ -25,7 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "minhaCervejaBarata";
@@ -146,6 +146,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     /*
+     * Creating a tipo
+     */
+    public Estabelecimento createEstabelecimento(Estabelecimento estabelecimento) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TABLE_SUPERMERCADO_COLUNA_NOME, estabelecimento.getNome());
+        values.put(TABLE_SUPERMERCADO_COLUNA_ENDERECO, estabelecimento.getEndereco());
+
+        // insert row
+        Long id = db.insert(TABLE_SUPERMERCADO, null, values);
+        //return todo_id;
+
+        estabelecimento.setId(id.intValue());
+
+        return estabelecimento;
+    }
+
+
+    /*
      * get single supermercado
      */
     public Estabelecimento getSupermercado(int id) {
@@ -167,6 +187,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         estabelecimento.setEndereco(c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_ENDERECO)));
 
         return estabelecimento;
+    }
+
+    public List<Estabelecimento> getAllEstabelecimentos() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
+        String selectQuery = "SELECT  * FROM " + TABLE_SUPERMERCADO;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Estabelecimento td = new Estabelecimento();
+                td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                td.setNome((c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_NOME))));
+                td.setEndereco(c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_ENDERECO)));
+
+                // adding to estabelecimentos list
+                estabelecimentos.add(td);
+            } while (c.moveToNext());
+        }
+
+        return estabelecimentos;
     }
 
 
@@ -193,6 +236,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         marca.setNome((c.getString(c.getColumnIndex(TABLE_MARCA_COLUNA_NOME))));
 
         return marca;
+    }
+
+    public Marca createMarca(Marca marca) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TABLE_MARCA_COLUNA_NOME, marca.getNome());
+
+        Long id = db.insert(TABLE_MARCA, null, values);
+        marca.setId(id.intValue());
+         return marca;
+    }
+
+    public List<Marca> getAllMarca() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Marca> marcas = new ArrayList<Marca>();
+        String selectQuery = "SELECT  * FROM " + TABLE_MARCA;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Marca td = new Marca();
+                td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+                td.setNome((c.getString(c.getColumnIndex(TABLE_MARCA_COLUNA_NOME))));
+
+                marcas.add(td);
+            } while (c.moveToNext());
+        }
+
+        return marcas;
     }
 
     //==================================================================================================
@@ -281,7 +354,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_MARCA_ID, produto.getMarca().getId());
         values.put(KEY_TIPO_ID, produto.getTipo().getId());
         values.put(TABLE_PRODUTO_COLUNA_VALOR, produto.getValor());
-        System.out.println("VALOR PRODUTO: "+produto.getValor());
 
         // insert row
         Long id = db.insert(TABLE_PRODUTO, null, values);
@@ -459,10 +531,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_PRODUTO_ID, itensCesta.getProduto().getId());
         values.put(KEY_CESTA_ID, itensCesta.getCesta().getId());
 
-
-
         //values.put(TABLE_CESTA_COLUNA_DATA, cesta.getDate());
-
 
         // insert row
         Long id = db.insert(TABLE_ITENS_CESTA, null, values);
@@ -516,7 +585,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 iCesta.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 iCesta.setProduto(getProduto((c.getInt(c.getColumnIndex(KEY_PRODUTO_ID)))));
                 iCesta.setCesta(getCesta((c.getInt(c.getColumnIndex(KEY_CESTA_ID)))));
-
                 // adding to supermercados list
                 itensCesta.add(iCesta);
             } while (c.moveToNext());
