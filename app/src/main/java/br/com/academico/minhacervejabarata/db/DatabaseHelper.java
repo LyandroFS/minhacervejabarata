@@ -25,7 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Database Name
     private static final String DATABASE_NAME = "minhaCervejaBarata";
@@ -53,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // NOTES Table - column nmaes
     private static final String TABLE_TIPO_COLUNA_DESCRICAO = "descrica";
     private static final String TABLE_TIPO_COLUNA_ML = "ml";
+    private static final String TABLE_TIPO_COLUNA_QTD_EMBALAGEM = "qtdEmbalagem";
 
     // NOTES Table - column nmaes
     private static final String TABLE_PRODUTO_COLUNA_VALOR = "valor";
@@ -88,6 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_TIPO = "CREATE TABLE "
             + TABLE_TIPO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + TABLE_TIPO_COLUNA_DESCRICAO + " TEXT,"
+            + TABLE_TIPO_COLUNA_QTD_EMBALAGEM + " INTEGER,"
             + TABLE_TIPO_COLUNA_ML + " REAL" + ")";
 
 
@@ -279,6 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(TABLE_TIPO_COLUNA_DESCRICAO, tipo.getDescricao());
         values.put(TABLE_TIPO_COLUNA_ML, tipo.getMl());
+        values.put(TABLE_TIPO_COLUNA_QTD_EMBALAGEM, tipo.getQdtEmbalagem());
 
         // insert row
         Long id = db.insert(TABLE_TIPO, null, values);
@@ -309,6 +312,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         tipo.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         tipo.setDescricao((c.getString(c.getColumnIndex(TABLE_TIPO_COLUNA_DESCRICAO))));
         tipo.setMl((c.getDouble(c.getColumnIndex(TABLE_TIPO_COLUNA_ML))));
+        tipo.setQdtEmbalagem((c.getInt(c.getColumnIndex(TABLE_TIPO_COLUNA_QTD_EMBALAGEM))));
 
         return tipo;
     }
@@ -332,6 +336,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 td.setDescricao((c.getString(c.getColumnIndex(TABLE_TIPO_COLUNA_DESCRICAO))));
                 td.setMl((c.getDouble(c.getColumnIndex(TABLE_TIPO_COLUNA_ML))));
+                td.setQdtEmbalagem((c.getInt(c.getColumnIndex(TABLE_TIPO_COLUNA_QTD_EMBALAGEM))));
+
 
                 // adding to supermercados list
                 tipos.add(td);
@@ -620,5 +626,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return itensCesta;
+    }
+
+     /* remove single itens cesta
+     */
+    public boolean removeItensCesta(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "DELETE FROM " + TABLE_ITENS_CESTA + " WHERE "
+                + KEY_ID + " = " + id;
+        return  db.delete(TABLE_ITENS_CESTA, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 }

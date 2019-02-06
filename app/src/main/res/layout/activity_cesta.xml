@@ -14,13 +14,41 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:gravity="center"
+            android:text="Cadastrar Cestas"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="87dp"
+            android:layout_height="20dp"
+            android:text="Nome Cesta"
+            android:layout_marginLeft="4dp"
+            tools:layout_editor_absoluteY="5dp"
+            tools:layout_editor_absoluteX="20dp" />
+
+
         <EditText
             android:id="@+id/nome_cesta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
+            android:maxLines="1"
+            tools:layout_editor_absoluteY="30dp"
+            tools:layout_editor_absoluteX="20dp"
             android:text="" />
+
+        <TextView
+            android:layout_width="87dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="4dp"
+            android:text="Produtos"
+            tools:layout_editor_absoluteY="5dp"
+            tools:layout_editor_absoluteX="20dp" />
 
         <Spinner
             android:id="@+id/produtos"
@@ -30,18 +58,28 @@
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_input_add"
-            android:onClick="addItenCesta"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:onClick="addItenCesta"
+            android:layout_gravity="right"
+            app:srcCompat="@android:drawable/ic_input_add" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="395dp"
         android:layout_height="405dp"
         android:orientation="vertical"
+        android:layout_margin="4dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="318dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="Meus Produtos"
+            android:gravity="center"
+            tools:layout_editor_absoluteY="5dp"
+            tools:layout_editor_absoluteX="20dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"

@@ -32,7 +32,8 @@
                 android:id="@+id/itens_cesta"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@mipmap/ic_launcher"
+                android:src="@android:drawable/ic_menu_delete"
+                android:background="@color/cardview_light_background"
                 android:layout_alignParentRight="true"/>
 
         </RelativeLayout>

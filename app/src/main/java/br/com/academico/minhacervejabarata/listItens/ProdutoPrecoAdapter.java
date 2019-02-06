@@ -11,35 +11,47 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import br.com.academico.minhacervejabarata.ItensCestaActivity;
 import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.Cesta;
+import br.com.academico.minhacervejabarata.beans.Produto;
+import br.com.academico.minhacervejabarata.beans.ProdutoPreco;
 
-public class CestaAdapter extends RecyclerView.Adapter<CestaAdapter.MyViewHolder> {
+public class ProdutoPrecoAdapter extends RecyclerView.Adapter<ProdutoPrecoAdapter.MyViewHolder> {
 
-    private List<Cesta> cestaList;
+    private List<ProdutoPreco> produtoPrecoList;
     private Context context;
     private Activity activity;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nome;
+        TextView quantiadeTotalLitros;
+        TextView precoTotalCesta;
         ImageButton itensCesta;
 
         public MyViewHolder(View view) {
             super(view);
             nome = (TextView)
                     view.findViewById(R.id.nome_cesta);
+
+            quantiadeTotalLitros = (TextView)
+                    view.findViewById(R.id.quatidade_litros);
+
+            precoTotalCesta = (TextView)
+                    view.findViewById(R.id.preco_total);
+
             itensCesta = (ImageButton)
                     view.findViewById(R.id.itens_cesta);
         }
     }
 
-    public CestaAdapter(Context context, Activity activity, List<Cesta> transmissaoListList) {
+    public ProdutoPrecoAdapter(Context context, Activity activity, List<ProdutoPreco> produtoPrecoList) {
         this.context = context;
         this.activity = activity;
-        this.cestaList = transmissaoListList;
+        this.produtoPrecoList = produtoPrecoList;
     }
 
     @Override
@@ -51,17 +63,21 @@ public class CestaAdapter extends RecyclerView.Adapter<CestaAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Cesta cesta = cestaList.get(position);
+        final ProdutoPreco produtoPreco = produtoPrecoList.get(position);
 
-        holder.nome.setText(cesta.getNome());
+        DecimalFormat formatFloat = new DecimalFormat("0.00");
+
+        holder.nome.setText("Cesta: "+produtoPreco.getCesta().getNome());
+        holder.quantiadeTotalLitros.setText("Quantidade Litros: "+String.valueOf(produtoPreco.getLitros()));
+        holder.precoTotalCesta.setText("Valor Total: R$ "+String.valueOf(formatFloat.format(produtoPreco.getValorTotal())));
         holder.itensCesta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                Cesta cesta = cestaList.get(position);
+                Cesta cesta = produtoPrecoList.get(position).getCesta();
 
-                Toast.makeText(context, "LISTAR ITENS", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "LISTAR ITENS", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(activity, ItensCestaActivity.class);
                 i.putExtra("id", cesta.getId());
                 activity.startActivity(i);
@@ -71,7 +87,7 @@ public class CestaAdapter extends RecyclerView.Adapter<CestaAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return cestaList.size();
+        return produtoPrecoList.size();
     }
 
     /*public void updateData(ArrayList<ViewModel> viewModels) {
@@ -79,13 +95,13 @@ public class CestaAdapter extends RecyclerView.Adapter<CestaAdapter.MyViewHolder
         cestaList.addAll(viewModels);
         notifyDataSetChanged();
     }*/
-    public void addItem(int position, Cesta cesta) {
-        cestaList.add(position, cesta);
+    public void addItem(int position, ProdutoPreco produtoPreco) {
+        produtoPrecoList.add(position, produtoPreco);
         notifyItemInserted(position);
     }
 
     public void removeItem(int position) {
-        cestaList.remove(position);
+        produtoPrecoList.remove(position);
         notifyItemRemoved(position);
     }
 

@@ -3,7 +3,6 @@ package br.com.academico.minhacervejabarata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,14 +16,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import br.com.academico.minhacervejabarata.beans.Cesta;
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.beans.ItensCesta;
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.beans.Produto;
+import br.com.academico.minhacervejabarata.beans.ProdutoPreco;
 import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.db.DatabaseHelper;
 import br.com.academico.minhacervejabarata.listItens.CestaAdapter;
+import br.com.academico.minhacervejabarata.listItens.ProdutoPrecoAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-       /* Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
+     /*  Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
         estabelecimento = db.createEstabelecimento(estabelecimento);
 
 
@@ -68,21 +75,24 @@ public class MainActivity extends AppCompatActivity
         Log.d("Tag CountMarca", "Tag Count: " + db.getAllMarca().size());
 
 
-        Tipo tipo1 = new Tipo("Garrafa", 600);
+        Tipo tipo1 = new Tipo("Garrafa", 600, 12);
         tipo1 = db.createTipo(tipo1);
 
-        Tipo tipo2 = new Tipo("Garrafa", 250);
+        Tipo tipo2 = new Tipo("Garrafa", 250, 12);
         tipo2 = db.createTipo(tipo2);
+
+        Tipo tipo3 = new Tipo("Garrafa", 350, 15);
+        tipo3 = db.createTipo(tipo2);
 
         Log.d("Tag CountTipo", "Tag Count: " + db.getAllTipo().size());
 
         Produto produto1 = new Produto(estabelecimento,marca1,tipo1, 5.20f);
         db.createProduto(produto1);
 
-        Produto produto2 = new Produto(estabelecimento2,marca2,tipo1, 2.40f);
+        Produto produto2 = new Produto(estabelecimento2,marca2,tipo2, 2.40f);
         db.createProduto(produto2);
 
-        Produto produto3 = new Produto(estabelecimento,marca1,tipo2, 3.60f);
+        Produto produto3 = new Produto(estabelecimento,marca1,tipo3, 3.60f);
         db.createProduto(produto3);
 
         Log.d("Tag CountProduto", "Tag Count: " + db.getAllProduto().size());*/
@@ -164,19 +174,9 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        mAdapter = new CestaAdapter(getApplicationContext(),this,db.getAllCesta());
-        mRecyclerView.setAdapter(mAdapter);
 
 
         //db.getAllItensCesta();
@@ -199,6 +199,104 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+
+
+
+
+
+
+        int quantidade = 3;
+        DecimalFormat formatFloat = new DecimalFormat("0.00");
+        DecimalFormat formatDecimal = new DecimalFormat("00");
+
+
+        //float totalLitrosCesta = 0, totalPrecoCesta = 0;
+
+        List<ProdutoPreco> produtoPrecoList =  new ArrayList<>();
+
+        for (Cesta cesta : db.getAllCesta()) {
+            //Cesta cesta = db.getCesta(4);
+            float totalLitrosCesta = 0, totalPrecoCesta = 0,  precoUnitatio=0;
+
+            Log.d("Tag CountItensCesta", " Cesta: " + cesta.getNome());
+
+            for (ItensCesta itensCesta : db.getAllItensCestaById(cesta.getId())) {
+                Produto produto = itensCesta.getProduto();
+                float valorLitro = Float.parseFloat(formatFloat.format(produto.getValor()));
+
+                float ml = Float.parseFloat(formatDecimal.format(produto.getTipo().getMl())) * quantidade;
+                float litro = ml / 1000;
+
+
+
+                float valor = Float.parseFloat(formatFloat.format(produto.getValor())) * quantidade;
+                valorLitro = valor / litro ;
+
+                totalLitrosCesta += litro;
+                totalPrecoCesta += valor;
+                precoUnitatio = Float.parseFloat(formatFloat.format(produto.getValor()));
+
+                // Log.d("Tag CountItensCesta", "LITRO: " + litro);
+
+               /* Log.d("Tag CountItensCesta", "Tag produto valor: " + ml + " " + formatFloat.format(produto.getValor()));
+               Log.d("Tag CountItensCesta", "LITRO: " + litro + " preço por litro: " + valorLitro);
+                Log.d("Tag CountItensCesta", "Valor Total: " + totalPrecoCesta);*/
+
+            }
+
+           /* Log.d("Tag CountItensCesta", "TOTAL LITROS: " + totalLitrosCesta);
+            Log.d("Tag CountItensCesta", "TOTAL PRECO: " + totalPrecoCesta);*/
+
+            produtoPrecoList.add(new ProdutoPreco(cesta, totalLitrosCesta, precoUnitatio, totalPrecoCesta));
+        }
+
+       /* public int compare(ProdutoPreco chair1, ProdutoPreco chair2) {
+            return Math.round(chair1.getValorLitro() - chair2.getValorLitro());
+        }
+    }*/
+
+
+        //Collections.sort(produtoPrecoList, new PrecoProdutoComparator());
+
+        Collections.sort(produtoPrecoList, new Comparator<ProdutoPreco>() {
+            public int compare(ProdutoPreco p1, ProdutoPreco p2) {
+                return Math.round(p1.getValorLitro() - p2.getValorLitro());
+            }
+        });
+
+        Collections.sort(produtoPrecoList, new Comparator<ProdutoPreco>() {
+            public int compare(ProdutoPreco p1, ProdutoPreco p2) {
+                return Math.round(p1.getLitros() - p2.getLitros());
+            }
+        });
+
+
+
+        /*for (ProdutoPreco p: produtoPrecoList){
+            Log.d("Tag CountItensCesta", "CESTA: " + p.getCesta().getId()  +" "+p.getCesta().getNome() +" Litros: " + p.getLitros() +" PRECO por Litro: " + p.getValorLitro());
+
+        }*/
+
+        // specify an adapter (see also next example)
+        mAdapter = new ProdutoPrecoAdapter(getApplicationContext(),this,produtoPrecoList);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
@@ -272,5 +370,11 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, MarcaActivity.class);
 
         startActivity(intent);
+    }
+
+    class PrecoProdutoComparator implements Comparator<ProdutoPreco> {
+        public int compare(ProdutoPreco chair1, ProdutoPreco chair2) {
+            return Math.round(chair1.getValorLitro() - chair2.getValorLitro());
+        }
     }
 }

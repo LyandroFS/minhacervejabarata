@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,12 +55,15 @@ public class CestaActivity extends AppCompatActivity {
         //cestaList = db.getAllCesta();
         itensCestaList = new ArrayList<>();
 
-        mAdapter = new ItensCestaAdapter(getApplicationContext(),this,itensCestaList);
+        mAdapter = new ItensCestaAdapter(getApplicationContext(),this,itensCestaList, db);
         mRecyclerView.setAdapter(mAdapter);
 
         listProdutos = db.getAllProduto();
+
+        DecimalFormat df = new DecimalFormat("0.00");
+
         for(Produto produto : listProdutos){
-            list.add(produto.getMarca().getNome()+", "+produto.getTipo().getDescricao()+" "+produto.getTipo().getMl()+produto.getValor()+" - "+produto.getEstabelecimento().getNome());
+            list.add(produto.getMarca().getNome()+", "+df.format(produto.getTipo().getMl())+"ml R$: "+df.format(produto.getValor())+" Emb. "+produto.getTipo().getQdtEmbalagem()+ " - "+produto.getEstabelecimento().getNome());
         }
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
