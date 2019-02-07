@@ -23,10 +23,10 @@
         <activity
             android:name=".AddMarcaActivity"
             android:label="@string/activity_add_marca"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MarcaActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.academico.minhacervejabarata.MainActivity" />
+                android:value="br.com.academico.minhacervejabarata.MarcaActivity" />
         </activity>
         <activity
             android:name=".AddMercadoActivity"

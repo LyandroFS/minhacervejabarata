@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import br.com.academico.minhacervejabarata.beans.Marca;
-import br.com.academico.minhacervejabarata.dao.MarcaDAO;
+import br.com.academico.minhacervejabarata.db.DatabaseHelper;
 
 public class AddMarcaActivity extends AppCompatActivity {
 
-    private MarcaDAO marcaDAO;
+    private DatabaseHelper db;
     private EditText nomeText;
 
     @Override
@@ -19,16 +19,19 @@ public class AddMarcaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marca);
         nomeText = findViewById(R.id.nomeText);
-        marcaDAO = new MarcaDAO(getApplicationContext());
-
+        db = DatabaseHelper.getInstance(getApplicationContext());
     }
 
     public void addMarca(View view) {
         String nome = nomeText.getText().toString();
         Marca marca = new Marca(nome);
-        if(marcaDAO.createMarca(marca))
+        if(db.isCreatedMarca(marca)) {
+            marca = db.getUltimaMarcaInserida();
+            db.getMarcaAdapter().adicionarMarca(marca);
+
             Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+        }
         else
             Snackbar.make(view, "Erro ao inserir item!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
