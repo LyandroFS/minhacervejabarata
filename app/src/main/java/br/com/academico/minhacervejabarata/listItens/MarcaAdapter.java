@@ -1,11 +1,14 @@
 package br.com.academico.minhacervejabarata.listItens;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import java.util.List;
 import br.com.academico.minhacervejabarata.AddMarcaActivity;
 import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.Marca;
+import br.com.academico.minhacervejabarata.db.DatabaseHelper;
 
 public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
 
@@ -48,6 +52,34 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
                 activity.startActivity(intent);
             }
         });
+
+        holder.btnExcluir.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View view = v;
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Confirmação")
+                        .setMessage("Tem certeza que deseja excluir esta marca?")
+                        .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Marca marca = marcas.get(position);
+                                DatabaseHelper db = DatabaseHelper.getInstance(view.getContext());
+                                if(db.removeMarca(marca.getId())){
+                                    removerMarca(position);
+                                    Snackbar.make(view, "Excluiu!", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }else{
+                                    Snackbar.make(view, "Erro ao excluir!", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .create()
+                        .show();
+            }
+        });
     }
 
     public void atualizarMarca(Marca marca, int index){
@@ -65,10 +97,6 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
         notifyItemInserted(getItemCount());
     }
 
-    public void atualizarLista(){
-
-    }
-
     private Activity getActivity(View view) {
         Context context = view.getContext();
         while (context instanceof ContextWrapper) {
@@ -79,4 +107,11 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
         }
         return null;
     }
+
+
+    public void removerMarca(int index){
+        marcas.remove(index);
+        notifyItemRemoved(index);
+    }
+
 }

@@ -688,4 +688,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return null;
     }
+
+    public boolean removeMarca(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "DELETE FROM " + TABLE_MARCA + " WHERE "
+                + KEY_ID + " = " + id;
+        return  db.delete(TABLE_MARCA, "id=?", new String[]{String.valueOf(id)}) > 0;
+    }
 }
