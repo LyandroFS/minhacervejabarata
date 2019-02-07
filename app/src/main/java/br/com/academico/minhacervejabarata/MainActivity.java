@@ -49,8 +49,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-      /*  db = new DatabaseHelper(getApplicationContext());
-      Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
+
+        db = new DatabaseHelper(getApplicationContext());
+
+
+
+
+     /*  Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
         estabelecimento = db.createEstabelecimento(estabelecimento);
 
 

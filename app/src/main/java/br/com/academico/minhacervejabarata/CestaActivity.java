@@ -57,7 +57,7 @@ public class CestaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cesta);
-        db = new DatabaseHelper(getApplicationContext());
+        db = DatabaseHelper.getInstance(getApplicationContext());
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
         //spinnerProdutos = (Spinner) findViewById(R.id.produtos);

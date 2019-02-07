@@ -20,7 +20,7 @@ public class EstabelecimentoDAO {
     private SQLiteDatabase db;
 
     public EstabelecimentoDAO(Context context){
-        db = new DatabaseHelper(context).getWritableDatabase();
+        db = DatabaseHelper.getInstance(context).getWritableDatabase();
     }
     public boolean createEstabelecimento(Estabelecimento estabelecimento/*, long[] tag_ids*/) {
 

@@ -18,8 +18,29 @@ import br.com.academico.minhacervejabarata.beans.ItensCesta;
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.Tipo;
+import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    //Singleton
+    private static DatabaseHelper instancia;
+
+    public static DatabaseHelper getInstance(Context context){
+        if(instancia == null)
+            instancia = new DatabaseHelper(context);
+        return instancia;
+    }
+
+    public MarcaAdapter getMarcaAdapter() {
+        return marcaAdapter;
+    }
+
+    public void setMarcaAdapter(MarcaAdapter marcaAdapter) {
+        this.marcaAdapter = marcaAdapter;
+    }
+
+    //para o crud
+    private MarcaAdapter marcaAdapter;
 
     // Logcat tag
     private static final String LOG = "DatabaseHelper";
@@ -116,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_CESTA_ID + " INTEGER "
             + ")";
 
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -505,7 +526,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.e(LOG, selectQuery);
 
-        SQLiteDatabase db = this.getReadableDatabase();
+//        private DatabaseHelper dbhelper;
+//        dbhelper = new DatabaseHelper();
+        SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
@@ -636,5 +659,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "DELETE FROM " + TABLE_ITENS_CESTA + " WHERE "
                 + KEY_ID + " = " + id;
         return  db.delete(TABLE_ITENS_CESTA, "id=?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+
+    public boolean isCreatedMarca(Marca marca) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TABLE_MARCA_COLUNA_NOME, marca.getNome());
+
+        return db.insert(TABLE_MARCA, null, values) > 0;
+    }
+
+    public Marca getUltimaMarcaInserida() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT  * FROM " + TABLE_MARCA + " ORDER BY ID DESC ", null);
+
+        if(cursor.moveToFirst()){
+            int id = cursor.getInt(cursor.getColumnIndex(KEY_ID));
+            String nome = cursor.getString(cursor.getColumnIndex(TABLE_MARCA_COLUNA_NOME));
+            cursor.close();
+            return new Marca(id, nome);
+        }
+
+        return null;
     }
 }
