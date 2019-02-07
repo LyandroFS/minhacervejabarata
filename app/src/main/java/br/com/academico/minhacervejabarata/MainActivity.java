@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        db = new DatabaseHelper(getApplicationContext());
+        db = DatabaseHelper.getInstance(getApplicationContext());
 
 
 
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        db = new DatabaseHelper(getApplicationContext());
+        db = DatabaseHelper.getInstance(getApplicationContext());
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
 
@@ -308,11 +308,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             Intent intent = new Intent(this, AddMercadoActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_marca) {
+            Intent intent = new Intent(this, MarcaActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
