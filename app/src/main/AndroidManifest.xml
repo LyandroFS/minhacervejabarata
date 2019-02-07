@@ -9,8 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CestaActivity"></activity>
-        <activity android:name=".ItensCestaActivity" />
+        <activity
+            android:name=".CestaActivity"
+            android:label="@string/title_activity_cesta"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.academico.minhacervejabarata.MainActivity" />
+
+        </activity>
+
+
+        <activity android:name=".ItensCestaActivity"
+            android:label="@string/title_activity_itens_cesta"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.academico.minhacervejabarata.MainActivity" />
+
+        </activity>
+
         <activity android:name=".item_lista" />
         <activity
             android:name=".MarcaActivity"
