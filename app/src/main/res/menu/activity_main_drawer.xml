@@ -5,9 +5,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_estabelecimento"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Adicionar Estabelecimento" />
+            android:title="Estabelecimento" />
         <item
             android:id="@+id/nav_marca"
             android:icon="@drawable/ic_menu_manage"

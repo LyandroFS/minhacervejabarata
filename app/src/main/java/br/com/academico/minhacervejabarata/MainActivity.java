@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,22 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
-import br.com.academico.minhacervejabarata.beans.Cesta;
-import br.com.academico.minhacervejabarata.beans.Estabelecimento;
-import br.com.academico.minhacervejabarata.beans.ItensCesta;
-import br.com.academico.minhacervejabarata.beans.Marca;
-import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.ProdutoPreco;
-import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.db.DatabaseHelper;
 import br.com.academico.minhacervejabarata.listItens.CestaAdapter;
-import br.com.academico.minhacervejabarata.listItens.ProdutoPrecoAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -305,8 +293,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            Intent intent = new Intent(this, AddMercadoActivity.class);
+        if (id == R.id.nav_estabelecimento) {
+            Intent intent = new Intent(this, EstabelecimentoActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_marca) {
             Intent intent = new Intent(this, MarcaActivity.class);
@@ -327,7 +315,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addEstabelecimento(View view) {
-        Intent intent = new Intent(this, AddMercadoActivity.class);
+        Intent intent = new Intent(this, AddEstabelecimentoActivity.class);
         startActivity(intent);
     }
 

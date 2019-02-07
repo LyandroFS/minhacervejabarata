@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddMercadoActivity">
+    tools:context=".AddEstabelecimentoActivity">
 
     <EditText
-        android:id="@+id/nome"
+        android:id="@+id/nomeTxt"
         android:layout_width="395dp"
         android:layout_height="75dp"
         android:layout_marginBottom="544dp"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/endereco"
+        android:id="@+id/enderecoTxt"
         android:layout_width="395dp"
         android:layout_height="75dp"
         android:layout_marginTop="44dp"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nome" />
+        app:layout_constraintTop_toBottomOf="@+id/nomeTxt" />
 
     <Button
         android:id="@+id/salvarBtn"
@@ -42,5 +42,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/endereco" />
+        app:layout_constraintTop_toBottomOf="@+id/enderecoTxt" />
 </android.support.constraint.ConstraintLayout>

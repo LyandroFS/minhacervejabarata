@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.db.DatabaseHelper;
-import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
 
 public class AddMarcaActivity extends AppCompatActivity {
 
@@ -42,7 +41,7 @@ public class AddMarcaActivity extends AppCompatActivity {
         String nome = nomeText.getText().toString();
         Handler handler = new Handler();
         marca.setNome(nome);
-        if(db.insertOrUpdate(marca)) {
+        if(db.insertOrUpdateMarca(marca)) {
             if(marca.getId()<1) {
                 marca = db.getUltimaMarcaInserida();
                 db.getMarcaAdapter().adicionarMarca(marca);

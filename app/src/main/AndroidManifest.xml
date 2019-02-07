@@ -10,25 +10,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".EstabelecimentoActivity"
+            android:label="@string/title_activity_estabelecimento"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.academico.minhacervejabarata.MainActivity" />
+        </activity>
+        <activity
             android:name=".CestaActivity"
             android:label="@string/title_activity_cesta"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.academico.minhacervejabarata.MainActivity" />
-
         </activity>
-
-
-        <activity android:name=".ItensCestaActivity"
+        <activity
+            android:name=".ItensCestaActivity"
             android:label="@string/title_activity_itens_cesta"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.academico.minhacervejabarata.MainActivity" />
-
         </activity>
-
         <activity android:name=".item_lista" />
         <activity
             android:name=".MarcaActivity"
@@ -47,7 +52,7 @@
                 android:value="br.com.academico.minhacervejabarata.MarcaActivity" />
         </activity>
         <activity
-            android:name=".AddMercadoActivity"
+            android:name=".AddEstabelecimentoActivity"
             android:label="@string/activity_add_mercado"
             android:parentActivityName=".MainActivity">
             <meta-data

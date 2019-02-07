@@ -54,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_MARCA = "marca";
     private static final String TABLE_PRODUTO = "protudo";
-    private static final String TABLE_SUPERMERCADO = "supermercado";
+    private static final String TABLE_ESTABELECIMENTO = "supermercado";
     private static final String TABLE_TIPO = "tipo";
     private static final String TABLE_CESTA = "cesta";
     private static final String TABLE_ITENS_CESTA = "itens_cesta";
@@ -64,8 +64,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //private static final String KEY_CREATED_AT = "created_at";
 
     // NOTES Table - column nmaes
-    private static final String TABLE_SUPERMERCADO_COLUNA_NOME = "nome";
-    private static final String TABLE_SUPERMERCADO_COLUNA_ENDERECO = "endereco";
+    private static final String TABLE_ESTABELECIMENTO_COLUNA_NOME = "nome";
+    private static final String TABLE_ESTABELECIMENTO_COLUNA_ENDERECO = "endereco";
 
     // NOTES Table - column nmaes
     private static final String TABLE_MARCA_COLUNA_NOME = "nome";
@@ -87,7 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TAG_NAME = "tag_name";
 
     // NOTE_TAGS Table - column names
-    private static final String KEY_SUPERMERCADO_ID = "idSupermercado";
+    private static final String KEY_ESTABELECIMENTO_ID = "idSupermercado";
     private static final String KEY_MARCA_ID = "idMarca";
     private static final String KEY_TIPO_ID = "idTipo";
     private static final String KEY_PRODUTO_ID = "idProduto";
@@ -95,10 +95,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Table Create Statements
     // Estabelecimento table create statement
-    private static final String CREATE_TABLE_SUPERMERCADO = "CREATE TABLE "
-            + TABLE_SUPERMERCADO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + TABLE_SUPERMERCADO_COLUNA_NOME + " TEXT,"
-            + TABLE_SUPERMERCADO_COLUNA_ENDERECO + " TEXT" + ")";
+    private static final String CREATE_TABLE_ESTABELECIMENTO = "CREATE TABLE "
+            + TABLE_ESTABELECIMENTO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + TABLE_ESTABELECIMENTO_COLUNA_NOME + " TEXT,"
+            + TABLE_ESTABELECIMENTO_COLUNA_ENDERECO + " TEXT" + ")";
 
     // Tag table create statement
     private static final String CREATE_TABLE_MARCA = "CREATE TABLE " + TABLE_MARCA
@@ -117,7 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // todo_tag table create statement
     private static final String CREATE_TABLE_PRODUTO = "CREATE TABLE "
             + TABLE_PRODUTO + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_SUPERMERCADO_ID + " INTEGER,"
+            + KEY_ESTABELECIMENTO_ID + " INTEGER,"
             + KEY_MARCA_ID + " INTEGER,"
             + KEY_TIPO_ID + " INTEGER,"
             + TABLE_PRODUTO_COLUNA_VALOR + " REAL" + ")";
@@ -145,7 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         // creating required tables
-        db.execSQL(CREATE_TABLE_SUPERMERCADO);
+        db.execSQL(CREATE_TABLE_ESTABELECIMENTO);
         db.execSQL(CREATE_TABLE_MARCA);
         db.execSQL(CREATE_TABLE_TIPO);
         db.execSQL(CREATE_TABLE_PRODUTO);
@@ -161,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUTO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TIPO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MARCA);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUPERMERCADO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ESTABELECIMENTO);
 
         // create new tables
         onCreate(db);
@@ -175,11 +175,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(TABLE_SUPERMERCADO_COLUNA_NOME, estabelecimento.getNome());
-        values.put(TABLE_SUPERMERCADO_COLUNA_ENDERECO, estabelecimento.getEndereco());
+        values.put(TABLE_ESTABELECIMENTO_COLUNA_NOME, estabelecimento.getNome());
+        values.put(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO, estabelecimento.getEndereco());
 
         // insert row
-        Long id = db.insert(TABLE_SUPERMERCADO, null, values);
+        Long id = db.insert(TABLE_ESTABELECIMENTO, null, values);
         //return todo_id;
 
         estabelecimento.setId(id.intValue());
@@ -189,12 +189,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     /*
-     * get single supermercado
+     * get single ESTABELECIMENTO
      */
-    public Estabelecimento getSupermercado(int id) {
+    public Estabelecimento getEstabelecimento(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_SUPERMERCADO + " WHERE "
+        String selectQuery = "SELECT  * FROM " + TABLE_ESTABELECIMENTO + " WHERE "
                 + KEY_ID + " = " + id;
 
         Log.e(LOG, selectQuery);
@@ -206,8 +206,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Estabelecimento estabelecimento = new Estabelecimento();
         estabelecimento.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        estabelecimento.setNome((c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_NOME))));
-        estabelecimento.setEndereco(c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_ENDERECO)));
+        estabelecimento.setNome((c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_NOME))));
+        estabelecimento.setEndereco(c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO)));
 
         return estabelecimento;
     }
@@ -215,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Estabelecimento> getAllEstabelecimentos() {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
-        String selectQuery = "SELECT  * FROM " + TABLE_SUPERMERCADO;
+        String selectQuery = "SELECT  * FROM " + TABLE_ESTABELECIMENTO;
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -224,8 +224,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 Estabelecimento td = new Estabelecimento();
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                td.setNome((c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_NOME))));
-                td.setEndereco(c.getString(c.getColumnIndex(TABLE_SUPERMERCADO_COLUNA_ENDERECO)));
+                td.setNome((c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_NOME))));
+                td.setEndereco(c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO)));
 
                 // adding to estabelecimentos list
                 estabelecimentos.add(td);
@@ -360,7 +360,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 td.setQdtEmbalagem((c.getInt(c.getColumnIndex(TABLE_TIPO_COLUNA_QTD_EMBALAGEM))));
 
 
-                // adding to supermercados list
+                // adding to Estabelecimento list
                 tipos.add(td);
             } while (c.moveToNext());
         }
@@ -377,7 +377,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_SUPERMERCADO_ID, produto.getEstabelecimento().getId());
+        values.put(KEY_ESTABELECIMENTO_ID, produto.getEstabelecimento().getId());
         values.put(KEY_MARCA_ID, produto.getMarca().getId());
         values.put(KEY_TIPO_ID, produto.getTipo().getId());
         values.put(TABLE_PRODUTO_COLUNA_VALOR, produto.getValor());
@@ -410,13 +410,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Produto produto = new Produto();
         produto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 
-        produto.setEstabelecimento(getSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID)))));
+        produto.setEstabelecimento(getEstabelecimento((c.getInt(c.getColumnIndex(KEY_ESTABELECIMENTO_ID)))));
         produto.setMarca(getMarca((c.getInt(c.getColumnIndex(KEY_MARCA_ID)))));
         produto.setTipo(getTipo((c.getInt(c.getColumnIndex(KEY_TIPO_ID)))));
         produto.setValor((c.getFloat(c.getColumnIndex(TABLE_PRODUTO_COLUNA_VALOR))));
 
 
-        //produto.setIdSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID))));
+        //produto.setIdSupermercado((c.getInt(c.getColumnIndex(KEY_ESTABELECIMENTO_ID))));
         //produto.setIdMarca((c.getInt(c.getColumnIndex(KEY_MARCA_ID))));
         //produto.setIdTipo((c.getInt(c.getColumnIndex(KEY_TIPO_ID))));
 
@@ -440,14 +440,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 /*Produto produto = new Produto();
                 produto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                produto.setIdSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID))));
+                produto.setIdSupermercado((c.getInt(c.getColumnIndex(KEY_ESTABELECIMENTO_ID))));
                 produto.setIdMarca((c.getInt(c.getColumnIndex(KEY_MARCA_ID))));
                 produto.setIdTipo((c.getInt(c.getColumnIndex(KEY_TIPO_ID))));*/
 
                 Produto produto = new Produto();
                 produto.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 
-                produto.setEstabelecimento(getSupermercado((c.getInt(c.getColumnIndex(KEY_SUPERMERCADO_ID)))));
+                produto.setEstabelecimento(getEstabelecimento((c.getInt(c.getColumnIndex(KEY_ESTABELECIMENTO_ID)))));
                 produto.setMarca(getMarca((c.getInt(c.getColumnIndex(KEY_MARCA_ID)))));
                 produto.setTipo(getTipo((c.getInt(c.getColumnIndex(KEY_TIPO_ID)))));
                 produto.setValor((c.getFloat(c.getColumnIndex(TABLE_PRODUTO_COLUNA_VALOR))));
@@ -662,7 +662,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertOrUpdate(Marca marca) {
+    public boolean insertOrUpdateMarca(Marca marca) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -696,4 +696,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + KEY_ID + " = " + id;
         return  db.delete(TABLE_MARCA, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
+
+    public boolean insertOrUpdateEstabelecimento (Estabelecimento estabelecimento/*, long[] tag_ids*/) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TABLE_ESTABELECIMENTO_COLUNA_NOME, estabelecimento.getNome());
+        values.put(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO, estabelecimento.getEndereco());
+
+        // insert row
+        return db.insert(TABLE_ESTABELECIMENTO, null, values) > 0;
+
+    }
+
+
 }

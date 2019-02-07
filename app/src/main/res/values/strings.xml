@@ -13,4 +13,5 @@
     <string name="title_activity_cesta">Cadastrar Cesta</string>
     <string name="title_activity_itens_cesta">Itens da Cesta</string>
     <string name="title_activity_cesta2">Cadastrar Cesta</string>
+    <string name="title_activity_estabelecimento">Estabelecimento</string>
 </resources>
