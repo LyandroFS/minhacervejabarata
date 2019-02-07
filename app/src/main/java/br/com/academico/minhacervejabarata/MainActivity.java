@@ -49,13 +49,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        db = new DatabaseHelper(getApplicationContext());
-
-
-
-
-     /*  Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
+      /*  db = new DatabaseHelper(getApplicationContext());
+      Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
         estabelecimento = db.createEstabelecimento(estabelecimento);
 
 
@@ -172,13 +167,6 @@ public class MainActivity extends AppCompatActivity
         }*/
 
 
-
-
-
-
-
-
-
         //db.getAllItensCesta();
 
 
@@ -205,6 +193,8 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
+        db = new DatabaseHelper(getApplicationContext());
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
 
         // use this setting to improve performance if you know that changes
@@ -216,18 +206,8 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
-
-
-
-
-
-        int quantidade = 3;
-        DecimalFormat formatFloat = new DecimalFormat("0.00");
+     /*   DecimalFormat formatFloat = new DecimalFormat("0.00");
         DecimalFormat formatDecimal = new DecimalFormat("00");
-
-
-        //float totalLitrosCesta = 0, totalPrecoCesta = 0;
 
         List<ProdutoPreco> produtoPrecoList =  new ArrayList<>();
 
@@ -235,45 +215,34 @@ public class MainActivity extends AppCompatActivity
             //Cesta cesta = db.getCesta(4);
             float totalLitrosCesta = 0, totalPrecoCesta = 0,  precoUnitatio=0;
 
-            Log.d("Tag CountItensCesta", " Cesta: " + cesta.getNome());
+            List<ItensCesta> intens =  db.getAllItensCestaById(cesta.getId());
+            int quantidade = intens.size();
 
-            for (ItensCesta itensCesta : db.getAllItensCestaById(cesta.getId())) {
+            for (ItensCesta itensCesta : intens) {
                 Produto produto = itensCesta.getProduto();
-                float valorLitro = Float.parseFloat(formatFloat.format(produto.getValor()));
 
-                float ml = Float.parseFloat(formatDecimal.format(produto.getTipo().getMl())) * quantidade;
+                float ml = Float.parseFloat(formatDecimal.format(produto.getTipo().getMl()).replace(",",".")) * quantidade;
                 float litro = ml / 1000;
+                float valor = Float.parseFloat(formatFloat.format(produto.getValor()).replace(",",".")) * quantidade;
 
-
-
-                float valor = Float.parseFloat(formatFloat.format(produto.getValor())) * quantidade;
-                valorLitro = valor / litro ;
 
                 totalLitrosCesta += litro;
                 totalPrecoCesta += valor;
-                precoUnitatio = Float.parseFloat(formatFloat.format(produto.getValor()));
+                precoUnitatio = Float.parseFloat(formatFloat.format(produto.getValor()).replace(",","."));
 
                 // Log.d("Tag CountItensCesta", "LITRO: " + litro);
 
-               /* Log.d("Tag CountItensCesta", "Tag produto valor: " + ml + " " + formatFloat.format(produto.getValor()));
+               *//* Log.d("Tag CountItensCesta", "Tag produto valor: " + ml + " " + formatFloat.format(produto.getValor()));
                Log.d("Tag CountItensCesta", "LITRO: " + litro + " preço por litro: " + valorLitro);
-                Log.d("Tag CountItensCesta", "Valor Total: " + totalPrecoCesta);*/
+                Log.d("Tag CountItensCesta", "Valor Total: " + totalPrecoCesta);*//*
 
             }
 
-           /* Log.d("Tag CountItensCesta", "TOTAL LITROS: " + totalLitrosCesta);
-            Log.d("Tag CountItensCesta", "TOTAL PRECO: " + totalPrecoCesta);*/
+           *//* Log.d("Tag CountItensCesta", "TOTAL LITROS: " + totalLitrosCesta);
+            Log.d("Tag CountItensCesta", "TOTAL PRECO: " + totalPrecoCesta);*//*
 
             produtoPrecoList.add(new ProdutoPreco(cesta, totalLitrosCesta, precoUnitatio, totalPrecoCesta));
         }
-
-       /* public int compare(ProdutoPreco chair1, ProdutoPreco chair2) {
-            return Math.round(chair1.getValorLitro() - chair2.getValorLitro());
-        }
-    }*/
-
-
-        //Collections.sort(produtoPrecoList, new PrecoProdutoComparator());
 
         Collections.sort(produtoPrecoList, new Comparator<ProdutoPreco>() {
             public int compare(ProdutoPreco p1, ProdutoPreco p2) {
@@ -288,14 +257,8 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
-        /*for (ProdutoPreco p: produtoPrecoList){
-            Log.d("Tag CountItensCesta", "CESTA: " + p.getCesta().getId()  +" "+p.getCesta().getNome() +" Litros: " + p.getLitros() +" PRECO por Litro: " + p.getValorLitro());
-
-        }*/
-
-        // specify an adapter (see also next example)
-        mAdapter = new ProdutoPrecoAdapter(getApplicationContext(),this,produtoPrecoList);
+        mAdapter = new ProdutoPrecoAdapter(getApplicationContext(),this,produtoPrecoList);*/
+        mAdapter = new CestaAdapter(getApplicationContext(),this,db.getAllCesta());
         mRecyclerView.setAdapter(mAdapter);
     }
 
