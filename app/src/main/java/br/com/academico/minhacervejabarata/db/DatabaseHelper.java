@@ -662,13 +662,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean isCreatedMarca(Marca marca) {
+    public boolean insertOrUpdate(Marca marca) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(TABLE_MARCA_COLUNA_NOME, marca.getNome());
 
-        return db.insert(TABLE_MARCA, null, values) > 0;
+        if(marca.getId()>0)
+            return db.update(TABLE_MARCA, values, "ID=?", new String[]{ marca.getId() + "" }) > 0;
+        else
+            return db.insert(TABLE_MARCA, null, values) > 0;
     }
 
     public Marca getUltimaMarcaInserida() {

@@ -5,6 +5,7 @@ public class Marca {
     private String nome;
 
     public Marca() {
+        setId(0);
     }
 
     public Marca(String nome) {

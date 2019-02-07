@@ -10,22 +10,24 @@
         android:id="@+id/nomeText"
         android:layout_width="395dp"
         android:layout_height="92dp"
-        android:layout_marginBottom="456dp"
+        android:layout_marginBottom="556dp"
         android:ems="10"
         android:hint="Nome"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/salvarBtn"
         android:layout_width="395dp"
         android:layout_height="87dp"
-        android:layout_marginBottom="268dp"
+        android:layout_marginBottom="368dp"
         android:onClick="addMarca"
         android:text="SALVAR"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
