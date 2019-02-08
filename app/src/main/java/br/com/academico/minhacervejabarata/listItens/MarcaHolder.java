@@ -16,7 +16,7 @@ public class MarcaHolder extends RecyclerView.ViewHolder {
     public MarcaHolder(View itemView) {
         super(itemView);
         nomeMarca = (TextView) itemView.findViewById(R.id.nomeMarca);
-        btnEditar = (ImageButton) itemView.findViewById(R.id.btnEdit);
-        btnExcluir = (ImageButton) itemView.findViewById(R.id.btnDelete);
+        btnEditar = (ImageButton) itemView.findViewById(R.id.btnEditMarca);
+        btnExcluir = (ImageButton) itemView.findViewById(R.id.btnDeleteMarca);
     }
 }

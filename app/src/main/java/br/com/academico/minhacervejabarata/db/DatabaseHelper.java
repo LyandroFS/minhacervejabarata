@@ -18,6 +18,7 @@ import br.com.academico.minhacervejabarata.beans.ItensCesta;
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.Tipo;
+import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -41,6 +42,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //para o crud
     private MarcaAdapter marcaAdapter;
+    private EstabelecimentoAdapter estabelecimentoAdapter;
+
+    public EstabelecimentoAdapter getEstabelecimentoAdapter() {
+        return estabelecimentoAdapter;
+    }
+
+    public void setEstabelecimentoAdapter(EstabelecimentoAdapter estabelecimentoAdapter) {
+        this.estabelecimentoAdapter = estabelecimentoAdapter;
+    }
 
     // Logcat tag
     private static final String LOG = "DatabaseHelper";
@@ -699,14 +709,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean insertOrUpdateEstabelecimento (Estabelecimento estabelecimento/*, long[] tag_ids*/) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(TABLE_ESTABELECIMENTO_COLUNA_NOME, estabelecimento.getNome());
         values.put(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO, estabelecimento.getEndereco());
 
-        // insert row
-        return db.insert(TABLE_ESTABELECIMENTO, null, values) > 0;
+        if(estabelecimento.getId()>0)
+            return db.update(TABLE_ESTABELECIMENTO, values, "ID=?", new String[]{ estabelecimento.getId() + "" }) > 0;
+        else
+            return db.insert(TABLE_ESTABELECIMENTO, null, values) > 0;
+    }
 
+    public Estabelecimento getUltimoEstabelecimentoInserido() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT  * FROM " + TABLE_ESTABELECIMENTO + " ORDER BY ID DESC ", null);
+        if(cursor.moveToFirst()){
+            int id = cursor.getInt(cursor.getColumnIndex(KEY_ID));
+            String nome = cursor.getString(cursor.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_NOME));
+            String endereco = cursor.getString(cursor.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO));
+            cursor.close();
+            return new Estabelecimento(id, nome, endereco);
+        }
+
+        return null;
     }
 
 
