@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".TipoActivity"
+            android:label="@string/title_activity_tipo"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.academico.minhacervejabarata.MainActivity" />
+        </activity>
+        <activity
             android:name=".EstabelecimentoActivity"
             android:label="@string/title_activity_estabelecimento"
             android:parentActivityName=".MainActivity"

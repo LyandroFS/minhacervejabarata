@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_tipo) {
-            Intent intent = new Intent(this, MarcaActivity.class);
+            Intent intent = new Intent(this, TipoActivity.class);
             startActivity(intent);
         }
 

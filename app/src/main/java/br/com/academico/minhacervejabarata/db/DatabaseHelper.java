@@ -737,5 +737,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  db.delete(TABLE_ESTABELECIMENTO, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 
+    public boolean insertOrUpdateTipo (Tipo tipo/*, long[] tag_ids*/) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TABLE_TIPO_COLUNA_DESCRICAO, tipo.getDescricao());
+        values.put(TABLE_TIPO_COLUNA_ML, tipo.getMl());
+        values.put(TABLE_TIPO_COLUNA_QTD_EMBALAGEM, tipo.getQdtEmbalagem());
+
+        if(tipo.getId()>0)
+            return db.update(TABLE_TIPO, values, "ID=?", new String[]{ tipo.getId() + "" }) > 0;
+        else
+            return db.insert(TABLE_TIPO, null, values) > 0;
+    }
+
+    public Tipo getUltimoTipoInserido() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT  * FROM " + TABLE_TIPO + " ORDER BY ID DESC ", null);
+        if(c.moveToFirst()){
+            Tipo tipo = new Tipo();
+            tipo.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            tipo.setDescricao((c.getString(c.getColumnIndex(TABLE_TIPO_COLUNA_DESCRICAO))));
+            tipo.setMl((c.getDouble(c.getColumnIndex(TABLE_TIPO_COLUNA_ML))));
+            tipo.setQdtEmbalagem((c.getInt(c.getColumnIndex(TABLE_TIPO_COLUNA_QTD_EMBALAGEM))));
+            c.close();
+            return tipo;
+        }
+        return null;
+    }
+
+
 
 }

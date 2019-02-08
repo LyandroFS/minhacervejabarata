@@ -1,7 +1,6 @@
 package br.com.academico.minhacervejabarata;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,45 +13,24 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
-import br.com.academico.minhacervejabarata.beans.Estabelecimento;
+import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.db.DatabaseHelper;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
+import br.com.academico.minhacervejabarata.listItens.TipoAdapter;
 
-public class EstabelecimentoActivity extends AppCompatActivity {
+public class TipoActivity extends AppCompatActivity {
 
-    private DatabaseHelper db;
-    private RecyclerView recyclerView;
-    private EstabelecimentoAdapter adapter;
-    private Estabelecimento estabelecimentoEditado = null;
-    private int position;
-
+    DatabaseHelper db;
+    RecyclerView recyclerView;
+    TipoAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_estabelecimento);
+        setContentView(R.layout.activity_tipo);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         db = DatabaseHelper.getInstance(this);
-        configurarRecycler();
-
-        Intent intent = getIntent();
-        if(intent.hasExtra("id")){
-            findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
-            findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
-            findViewById(R.id.fab).setVisibility(View.INVISIBLE);
-            estabelecimentoEditado = (Estabelecimento) db.getEstabelecimento((int)intent.getSerializableExtra("id"));
-            position = (int) intent.getSerializableExtra("index");
-
-
-            EditText txtNome = (EditText)findViewById(R.id.descricaoTxt);
-            EditText txtEndereco = (EditText)findViewById(R.id.enderecoTxt);
-
-            txtNome.setText(estabelecimentoEditado.getNome());
-            txtEndereco.setText(estabelecimentoEditado.getEndereco());
-        }
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,52 +57,39 @@ public class EstabelecimentoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText nomeText = (EditText) findViewById(R.id.descricaoTxt);
-                EditText enderecoText = (EditText) findViewById(R.id.enderecoTxt);
-                String nome = nomeText.getText().toString();
-                String endereco = enderecoText.getText().toString();
-                Estabelecimento estabelecimento = new Estabelecimento(nome,endereco);
+                EditText mlTxt = (EditText) findViewById(R.id.mlTxt);
+                EditText qtdTxt = (EditText) findViewById(R.id.qtdTxt);
+                String descricao = nomeText.getText().toString();
+                Double ml = Double.parseDouble(mlTxt.getText().toString());
+                int qtd = Integer.parseInt(qtdTxt.getText().toString());
+                Tipo tipo = new Tipo(descricao,ml,qtd);
 
-                if(estabelecimentoEditado!=null)
-                    estabelecimento.setId(estabelecimentoEditado.getId());
-                if (db.insertOrUpdateEstabelecimento(estabelecimento)) {
-                    if(estabelecimento.getId()<1) {
-                        estabelecimento = db.getUltimoEstabelecimentoInserido();
-                        adapter.adicionarEstabelecimento(estabelecimento);
-                    }
-                    else{
-                        adapter.atualizarEstabelecimento(estabelecimento, position);
-                    }
-//                    estabelecimento = db.getUltimoEstabelecimentoInserido();
-//                    adapter.adicionarEstabelecimento(estabelecimento);
+                boolean sucesso = db.insertOrUpdateTipo(tipo);
+                if(sucesso) {
+                    tipo = db.getUltimoTipoInserido();
+                    adapter.adicionarTipo(tipo);
+                    //limpa os campos
                     nomeText.setText("");
-                    enderecoText.setText("");
-                    Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
+                    mlTxt.setText("");
+                    qtdTxt.setText("");
+
+                    Snackbar.make(view, "Salvou!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     findViewById(R.id.includemain).setVisibility(View.VISIBLE);
                     findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
                     findViewById(R.id.fab).setVisibility(View.VISIBLE);
-                }
-                else
-                    Snackbar.make(view, "Erro ao inserir item!", Snackbar.LENGTH_LONG)
+                }else{
+                    Snackbar.make(view, "Erro ao salvar, consulte os logs!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                }
                 fecharTeclado();
                 findViewById(R.id.includemain).setVisibility(View.VISIBLE);
                 findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
                 findViewById(R.id.fab).setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    private int getIndex(Spinner spinner, String myString)
-    {
-        int index = 0;
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
-                index = i;
-                break;
-            }
-        }
-        return index;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        configurarRecycler();
     }
 
     private void configurarRecycler() {
@@ -134,8 +99,7 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // Adiciona o adapter que irá anexar os objetos à lista.
-        adapter = new EstabelecimentoAdapter(db.getAllEstabelecimentos());
-        db.setEstabelecimentoAdapter(adapter);
+        adapter = new TipoAdapter(db.getAllTipo());
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }

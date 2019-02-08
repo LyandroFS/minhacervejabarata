@@ -15,7 +15,7 @@ public class AddEstabelecimentoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_estabelecimento);
-        nomeText = (EditText) findViewById(R.id.nomeTxt);
+        nomeText = (EditText) findViewById(R.id.descricaoTxt);
         enderecoText = (EditText) findViewById(R.id.enderecoTxt);
 
     }
