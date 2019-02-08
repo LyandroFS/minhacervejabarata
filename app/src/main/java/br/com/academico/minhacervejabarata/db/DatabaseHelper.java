@@ -695,13 +695,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
             return new Marca(id, nome);
         }
-
         return null;
     }
 
     public boolean removeMarca(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         String selectQuery = "DELETE FROM " + TABLE_MARCA + " WHERE "
                 + KEY_ID + " = " + id;
         return  db.delete(TABLE_MARCA, "id=?", new String[]{String.valueOf(id)}) > 0;
@@ -729,8 +727,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
             return new Estabelecimento(id, nome, endereco);
         }
-
         return null;
+    }
+
+    public boolean removeEstabelecimento(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "DELETE FROM " + TABLE_ESTABELECIMENTO + " WHERE "
+                + KEY_ID + " = " + id;
+        return  db.delete(TABLE_ESTABELECIMENTO, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 
 

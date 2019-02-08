@@ -27,6 +27,7 @@ public class AddMarcaActivity extends AppCompatActivity {
         nomeText = findViewById(R.id.nomeText);
         db = DatabaseHelper.getInstance(getApplicationContext());
         marca = new Marca();
+        setTitle("Nova Marca");
 
         Intent intent = getIntent();
         if(intent.hasExtra("marcaId")) {

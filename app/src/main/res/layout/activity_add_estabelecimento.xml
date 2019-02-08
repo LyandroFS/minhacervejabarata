@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AddEstabelecimentoActivity">
 
+
     <EditText
         android:id="@+id/nomeTxt"
         android:layout_width="395dp"
