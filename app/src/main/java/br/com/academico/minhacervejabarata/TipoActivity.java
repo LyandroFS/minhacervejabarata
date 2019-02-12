@@ -1,6 +1,7 @@
 package br.com.academico.minhacervejabarata;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,9 +37,7 @@ public class TipoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
-                findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
-                findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+                showIncludeCadastro();
             }
         });
 
@@ -46,9 +45,7 @@ public class TipoActivity extends AppCompatActivity {
         btnCancelar.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                showEstabelecimentos();
             }
         });
 
@@ -75,21 +72,22 @@ public class TipoActivity extends AppCompatActivity {
 
                     Snackbar.make(view, "Salvou!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                    findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                    findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.fab).setVisibility(View.VISIBLE);
                 }else{
                     Snackbar.make(view, "Erro ao salvar, consulte os logs!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
                 fecharTeclado();
-                findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                showEstabelecimentos();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         configurarRecycler();
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("add")){
+            showIncludeCadastro();
+            intent.removeExtra("add");
+        }
     }
 
     private void configurarRecycler() {
@@ -110,6 +108,18 @@ public class TipoActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void showIncludeCadastro(){
+        findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
+        findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
+        findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+    }
+
+    private void showEstabelecimentos(){
+        findViewById(R.id.includemain).setVisibility(View.VISIBLE);
+        findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
+        findViewById(R.id.fab).setVisibility(View.VISIBLE);
     }
 
 }

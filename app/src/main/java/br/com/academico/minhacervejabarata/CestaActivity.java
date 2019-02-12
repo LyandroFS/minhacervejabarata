@@ -260,9 +260,18 @@ public class CestaActivity extends AppCompatActivity {
 
     public void addEstabelecimento(View view) {
         Intent intent = new Intent(view.getContext(), EstabelecimentoActivity.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra("add", "sim");
-//        activity.finish();
+        startActivity(intent);
+    }
+
+    public void btnAddMarca(View view) {
+        Intent intent = new Intent(view.getContext(), AddMarcaActivity.class);
+        startActivity(intent);
+    }
+
+    public void btnAddTipo(View view) {
+        Intent intent = new Intent(view.getContext(), TipoActivity.class);
+        intent.putExtra("add", "sim");
         startActivity(intent);
     }
 }

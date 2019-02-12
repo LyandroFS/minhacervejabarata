@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@android:drawable/ic_input_add"
-                    android:onClick="addItenCesta"
+                    android:onClick="btnAddMarca"
                     app:srcCompat="@android:color/transparent" />
 
             </LinearLayout>
@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@android:drawable/ic_input_add"
-                    android:onClick="addItenCesta"
+                    android:onClick="btnAddTipo"
                     app:srcCompat="@android:color/transparent" />
 
             </LinearLayout>
