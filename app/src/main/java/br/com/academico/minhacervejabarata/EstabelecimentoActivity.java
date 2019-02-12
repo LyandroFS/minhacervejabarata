@@ -40,16 +40,12 @@ public class EstabelecimentoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent.hasExtra("id")){
-            findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
-            findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
-            findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+            showIncludeCadastro();
             estabelecimentoEditado = (Estabelecimento) db.getEstabelecimento((int)intent.getSerializableExtra("id"));
             position = (int) intent.getSerializableExtra("index");
 
-
             EditText txtNome = (EditText)findViewById(R.id.descricaoTxt);
             EditText txtEndereco = (EditText)findViewById(R.id.enderecoTxt);
-
             txtNome.setText(estabelecimentoEditado.getNome());
             txtEndereco.setText(estabelecimentoEditado.getEndereco());
         }
@@ -58,9 +54,7 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
-                findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
-                findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+                showIncludeCadastro();
             }
         });
 
@@ -68,9 +62,7 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         btnCancelar.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                showEstabelecimentos();
             }
         });
 
@@ -94,25 +86,23 @@ public class EstabelecimentoActivity extends AppCompatActivity {
                     else{
                         adapter.atualizarEstabelecimento(estabelecimento, position);
                     }
-//                    estabelecimento = db.getUltimoEstabelecimentoInserido();
-//                    adapter.adicionarEstabelecimento(estabelecimento);
                     nomeText.setText("");
                     enderecoText.setText("");
                     Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                    findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                    findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.fab).setVisibility(View.VISIBLE);
                 }
                 else
                     Snackbar.make(view, "Erro ao inserir item!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 fecharTeclado();
-                findViewById(R.id.includemain).setVisibility(View.VISIBLE);
-                findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
-                findViewById(R.id.fab).setVisibility(View.VISIBLE);
+                showEstabelecimentos();
             }
         });
+
+        if(intent.hasExtra("add")){
+            showIncludeCadastro();
+            intent.removeExtra("add");
+        }
     }
 
     private int getIndex(Spinner spinner, String myString)
@@ -146,6 +136,18 @@ public class EstabelecimentoActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void showIncludeCadastro(){
+        findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
+        findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
+        findViewById(R.id.fab).setVisibility(View.INVISIBLE);
+    }
+
+    private void showEstabelecimentos(){
+        findViewById(R.id.includemain).setVisibility(View.VISIBLE);
+        findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
+        findViewById(R.id.fab).setVisibility(View.VISIBLE);
     }
 
 }

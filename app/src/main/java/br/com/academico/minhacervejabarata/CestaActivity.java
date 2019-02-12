@@ -1,5 +1,6 @@
 package br.com.academico.minhacervejabarata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -255,5 +256,13 @@ public class CestaActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         Toast.makeText(getApplicationContext(),"Cesta criada com sucesso!!!",Toast.LENGTH_LONG).show();
+    }
+
+    public void addEstabelecimento(View view) {
+        Intent intent = new Intent(view.getContext(), EstabelecimentoActivity.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra("add", "sim");
+//        activity.finish();
+        startActivity(intent);
     }
 }
