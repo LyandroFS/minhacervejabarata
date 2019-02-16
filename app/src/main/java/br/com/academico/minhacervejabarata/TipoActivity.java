@@ -32,6 +32,7 @@ public class TipoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = DatabaseHelper.getInstance(this);
+        setTitle("Tipo");
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,11 +56,9 @@ public class TipoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EditText nomeText = (EditText) findViewById(R.id.descricaoTxt);
                 EditText mlTxt = (EditText) findViewById(R.id.mlTxt);
-                EditText qtdTxt = (EditText) findViewById(R.id.qtdTxt);
                 String descricao = nomeText.getText().toString();
                 Double ml = Double.parseDouble(mlTxt.getText().toString());
-                int qtd = Integer.parseInt(qtdTxt.getText().toString());
-                Tipo tipo = new Tipo(descricao,ml,qtd);
+                Tipo tipo = new Tipo(descricao,ml,1);
 
                 boolean sucesso = db.insertOrUpdateTipo(tipo);
                 if(sucesso) {
@@ -68,7 +67,6 @@ public class TipoActivity extends AppCompatActivity {
                     //limpa os campos
                     nomeText.setText("");
                     mlTxt.setText("");
-                    qtdTxt.setText("");
 
                     Snackbar.make(view, "Salvou!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
