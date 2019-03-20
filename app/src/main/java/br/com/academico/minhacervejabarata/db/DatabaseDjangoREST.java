@@ -100,27 +100,12 @@ public class DatabaseDjangoREST implements IDatabase {
                         Type listType = new TypeToken<List<Estabelecimento>>() {}.getType();
                         estabelecimentos = new Gson().fromJson(String.valueOf(response), listType);
                         estabelecimentoAdapter.setEstabelecimentos(estabelecimentos);
-//                        for (int i=0;i<response.length();i++){
-//                            try {
-//                                JSONObject jobject = response.getJSONObject(i);
-//                                JsonParser parser = new JsonParser();
-//                                JsonElement mJson = parser.parse(jobject.toString());
-//                                Gson gson = new Gson();
-//                                Estabelecimento object = gson.fromJson(mJson, Estabelecimento.class);
-//                                estabelecimentos.add(object);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-                        Toast toast = Toast.makeText(context, "CERTO   "+response.toString(), Toast.LENGTH_LONG);
-                        toast.show();
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast toast = Toast.makeText(context, "ERRO    "+error.toString(),Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
                         toast.show();
                     }
                 }

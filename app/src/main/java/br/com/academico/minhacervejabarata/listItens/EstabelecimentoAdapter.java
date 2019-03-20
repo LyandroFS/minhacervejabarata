@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import java.util.List;
 
+import br.com.academico.minhacervejabarata.EstabelecimentoActivity;
 import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
@@ -25,6 +26,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
 
     public void setEstabelecimentos(List<Estabelecimento> estabelecimentos) {
         this.estabelecimentos = estabelecimentos;
+        notifyDataSetChanged();
     }
 
     public EstabelecimentoAdapter(List<Estabelecimento> estabelecimentos){
