@@ -18,13 +18,13 @@ import android.view.MenuItem;
 import java.util.Comparator;
 
 import br.com.academico.minhacervejabarata.beans.ProdutoPreco;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 import br.com.academico.minhacervejabarata.listItens.CestaAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DatabaseHelper db;
+    private DatabaseSqlite db;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        db = DatabaseHelper.getInstance(getApplicationContext());
+        db = DatabaseSqlite.getInstance(getApplicationContext());
 
 
 
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        db = DatabaseHelper.getInstance(getApplicationContext());
+        db = DatabaseSqlite.getInstance(getApplicationContext());
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
 

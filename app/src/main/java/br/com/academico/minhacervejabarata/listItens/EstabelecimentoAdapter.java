@@ -18,10 +18,14 @@ import java.util.List;
 
 import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 
 public class EstabelecimentoAdapter extends RecyclerView.Adapter<EstabelecimentoHolder> {
-    private final List<Estabelecimento> estabelecimentos;
+    private List<Estabelecimento> estabelecimentos;
+
+    public void setEstabelecimentos(List<Estabelecimento> estabelecimentos) {
+        this.estabelecimentos = estabelecimentos;
+    }
 
     public EstabelecimentoAdapter(List<Estabelecimento> estabelecimentos){
         this.estabelecimentos = estabelecimentos;
@@ -61,7 +65,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Estabelecimento estabelecimento = estabelecimentos.get(position);
-                                DatabaseHelper db = DatabaseHelper.getInstance(view.getContext());
+                                DatabaseSqlite db = DatabaseSqlite.getInstance(view.getContext());
                                 boolean sucesso = db.removeEstabelecimento(estabelecimento.getId());
                                 if(sucesso) {
                                     removerEstabelecimento(position);

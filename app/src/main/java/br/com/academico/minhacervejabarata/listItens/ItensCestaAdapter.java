@@ -1,9 +1,7 @@
 package br.com.academico.minhacervejabarata.listItens;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +14,21 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.ItensCesta;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 
 public class ItensCestaAdapter extends RecyclerView.Adapter<ItensCestaAdapter.MyViewHolder> {
 
     private List<ItensCesta> itensCestaList;
     private Context context;
     private Activity activity;
-    private DatabaseHelper db;
+    private IDatabase db;
 
-    public ItensCestaAdapter(Context context, Activity activity, List<ItensCesta> itensCestaList, DatabaseHelper db) {
+    public ItensCestaAdapter(Context context, Activity activity, List<ItensCesta> itensCestaList, IDatabase db) {
         this.context = context;
         this.activity = activity;
         this.itensCestaList = itensCestaList;

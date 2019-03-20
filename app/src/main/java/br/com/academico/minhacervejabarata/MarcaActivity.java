@@ -7,24 +7,22 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Spinner;
 
-import br.com.academico.minhacervejabarata.beans.Marca;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
 
 public class MarcaActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private MarcaAdapter adapter;
-    private DatabaseHelper db;
+    private DatabaseSqlite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marca);
-        db = DatabaseHelper.getInstance(this);
+        db = DatabaseSqlite.getInstance(this);
         configurarRecycler();
 
     }

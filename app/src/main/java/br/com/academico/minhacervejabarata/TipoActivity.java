@@ -16,13 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import br.com.academico.minhacervejabarata.beans.Tipo;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
-import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 import br.com.academico.minhacervejabarata.listItens.TipoAdapter;
 
 public class TipoActivity extends AppCompatActivity {
 
-    DatabaseHelper db;
+    DatabaseSqlite db;
     RecyclerView recyclerView;
     TipoAdapter adapter;
     @Override
@@ -31,7 +30,7 @@ public class TipoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tipo);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        db = DatabaseHelper.getInstance(this);
+        db = DatabaseSqlite.getInstance(this);
         setTitle("Tipo");
 
         FloatingActionButton fab = findViewById(R.id.fab);

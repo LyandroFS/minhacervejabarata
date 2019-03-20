@@ -1,6 +1,5 @@
 package br.com.academico.minhacervejabarata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,16 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +23,13 @@ import br.com.academico.minhacervejabarata.beans.ItensCesta;
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.Tipo;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
-import br.com.academico.minhacervejabarata.listItens.CestaAdapter;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 import br.com.academico.minhacervejabarata.listItens.ItensCestaAdapter;
 
 public class CestaActivity extends AppCompatActivity {
 
-    private DatabaseHelper db;
+    private IDatabase db;
     private RecyclerView mRecyclerView;
     private ItensCestaAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -58,7 +54,7 @@ public class CestaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cesta);
-        db = DatabaseHelper.getInstance(getApplicationContext());
+        db = DatabaseSqlite.getInstance(getApplicationContext());
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
         //spinnerProdutos = (Spinner) findViewById(R.id.produtos);

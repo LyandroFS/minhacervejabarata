@@ -1,6 +1,5 @@
 package br.com.academico.minhacervejabarata;
 
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,12 +24,12 @@ import br.com.academico.minhacervejabarata.beans.ItensCesta;
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.Tipo;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 import br.com.academico.minhacervejabarata.listItens.ItensCestaAdapter;
 
 public class ItensCestaActivity extends AppCompatActivity {
 
-    private DatabaseHelper db;
+    private DatabaseSqlite db;
     private RecyclerView mRecyclerView;
     private ItensCestaAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -54,7 +53,7 @@ public class ItensCestaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itens_cesta);
-        db = DatabaseHelper.getInstance(getApplicationContext());
+        db = DatabaseSqlite.getInstance(getApplicationContext());
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
         mRecyclerView.setHasFixedSize(true);

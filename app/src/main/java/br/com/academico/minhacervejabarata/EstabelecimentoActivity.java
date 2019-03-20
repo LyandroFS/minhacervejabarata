@@ -17,12 +17,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 
 public class EstabelecimentoActivity extends AppCompatActivity {
 
-    private DatabaseHelper db;
+    private IDatabase db;
     private RecyclerView recyclerView;
     private EstabelecimentoAdapter adapter;
     private Estabelecimento estabelecimentoEditado = null;
@@ -35,7 +37,7 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        db = DatabaseHelper.getInstance(this);
+        db = DatabaseDjangoREST.getInstance(this);
         configurarRecycler();
 
         Intent intent = getIntent();

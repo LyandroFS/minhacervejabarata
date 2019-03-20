@@ -1,9 +1,16 @@
 package br.com.academico.minhacervejabarata.beans;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Estabelecimento {
 
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("nome")
     private String nome;
+
+    @SerializedName("endereco")
     private String endereco;
 
     public Estabelecimento() {
