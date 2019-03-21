@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -83,6 +84,44 @@ public class DatabaseDjangoREST implements IDatabase {
 
     @Override
     public Estabelecimento createEstabelecimento(Estabelecimento estabelecimento) {
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Estabelecimento>() {}.getType();
+        String json = gson.toJson(estabelecimento, type);
+        System.out.println(json);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", 0);
+            jsonObject.put("nome",estabelecimento.getNome());
+            jsonObject.put("endereco", estabelecimento.getEndereco());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+            Request.Method.POST,
+            "http://caiovosilva.pythonanywhere.com/estabelecimentos/",
+            jsonObject,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Toast toast = Toast.makeText(context, "CERTOOOO:    "+response.toString(),Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
+        );
+
+        requestQueue.add(objectRequest);
+
         return null;
     }
 

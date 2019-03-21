@@ -80,8 +80,14 @@ public class EstabelecimentoActivity extends AppCompatActivity {
                 String endereco = enderecoText.getText().toString();
                 Estabelecimento estabelecimento = new Estabelecimento(nome,endereco);
 
-                if(estabelecimentoEditado!=null)
+                if(estabelecimentoEditado!=null) {
                     estabelecimento.setId(estabelecimentoEditado.getId());
+                    // TO DO PUT HERE
+
+                }
+
+                db.createEstabelecimento(estabelecimento);
+
                 if (db.insertOrUpdateEstabelecimento(estabelecimento)) {
                     if(estabelecimento.getId()<1) {
                         estabelecimento = db.getUltimoEstabelecimentoInserido();
