@@ -32,19 +32,10 @@ public class EstabelecimentoActivity extends AppCompatActivity {
     private EstabelecimentoAdapter adapter;
     private Estabelecimento estabelecimentoEditado = null;
     private int position;
-//    private View includeMain;
-//    private View includeCadastro;
-//    private FloatingActionButton fab;
-//    private View progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        fab = findViewById(R.id.fab);
-//        includeMain = findViewById(R.id.includemain);
-//        includeCadastro = findViewById(R.id.includecadastro);
-//        progressBar = findViewById(R.id.note_list_progress);
-
         setContentView(R.layout.activity_estabelecimento);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -155,19 +146,12 @@ public class EstabelecimentoActivity extends AppCompatActivity {
     }
 
     private void showIncludeCadastro(){
-//        includeMain.setVisibility(View.INVISIBLE);
-//        includeCadastro.setVisibility(View.VISIBLE);
-//        fab.setVisibility(View.INVISIBLE);
         findViewById(R.id.includemain).setVisibility(View.INVISIBLE);
         findViewById(R.id.includecadastro).setVisibility(View.VISIBLE);
         findViewById(R.id.fab).setVisibility(View.INVISIBLE);
     }
 
     private void showEstabelecimentos(){
-//        includeMain.setVisibility(View.VISIBLE);
-//        includeCadastro.setVisibility(View.INVISIBLE);
-//        fab.setVisibility(View.VISIBLE);
-
         findViewById(R.id.includemain).setVisibility(View.VISIBLE);
         findViewById(R.id.includecadastro).setVisibility(View.INVISIBLE);
         findViewById(R.id.fab).setVisibility(View.VISIBLE);

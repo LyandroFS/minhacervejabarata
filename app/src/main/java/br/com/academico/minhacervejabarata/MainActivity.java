@@ -310,21 +310,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void addCerveja(View view) {
-    }
-
-    public void addEstabelecimento(View view) {
-        Intent intent = new Intent(this, AddEstabelecimentoActivity.class);
-        startActivity(intent);
-    }
-
-    public void addMarca(View view) {
-        //Intent intent = new Intent(this, AddMarcaActivity.class);
-        Intent intent = new Intent(this, MarcaActivity.class);
-
-        startActivity(intent);
-    }
-
     class PrecoProdutoComparator implements Comparator<ProdutoPreco> {
         public int compare(ProdutoPreco chair1, ProdutoPreco chair2) {
             return Math.round(chair1.getValorLitro() - chair2.getValorLitro());
