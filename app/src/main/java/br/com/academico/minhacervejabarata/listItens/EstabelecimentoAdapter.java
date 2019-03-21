@@ -23,14 +23,17 @@ import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 
 public class EstabelecimentoAdapter extends RecyclerView.Adapter<EstabelecimentoHolder> {
     private List<Estabelecimento> estabelecimentos;
+    private EstabelecimentoActivity estabelecimentoActivity;
 
     public void setEstabelecimentos(List<Estabelecimento> estabelecimentos) {
         this.estabelecimentos = estabelecimentos;
         notifyDataSetChanged();
+        estabelecimentoActivity.disableProgressBar();
     }
 
-    public EstabelecimentoAdapter(List<Estabelecimento> estabelecimentos){
+    public EstabelecimentoAdapter(List<Estabelecimento> estabelecimentos, EstabelecimentoActivity estabelecimentoActivity){
         this.estabelecimentos = estabelecimentos;
+        this.estabelecimentoActivity = estabelecimentoActivity;
     }
 
     @NonNull

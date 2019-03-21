@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.List;
+
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
 import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
@@ -135,7 +137,10 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // Adiciona o adapter que irá anexar os objetos à lista.
-        adapter = new EstabelecimentoAdapter(db.getAllEstabelecimentos());
+        List<Estabelecimento> estabelecimentoList = db.getAllEstabelecimentos();
+        if(estabelecimentoList.size()<1)
+            findViewById(R.id.note_list_progress).setVisibility(View.VISIBLE);
+        adapter = new EstabelecimentoAdapter(estabelecimentoList, this);
         db.setEstabelecimentoAdapter(adapter);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -168,8 +173,7 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         findViewById(R.id.fab).setVisibility(View.VISIBLE);
     }
 
-    public void updateEstabelecimentos(){
+    public void disableProgressBar(){
         findViewById(R.id.note_list_progress).setVisibility(View.INVISIBLE);
-        adapter.notifyDataSetChanged();
     }
 }

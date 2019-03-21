@@ -1,11 +1,13 @@
 package br.com.academico.minhacervejabarata.db;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.Cesta;
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.beans.ItensCesta;
