@@ -181,7 +181,7 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
     /*
      * Creating a tipo
      */
-    public Estabelecimento createEstabelecimento(Estabelecimento estabelecimento) {
+    public Estabelecimento insertEstabelecimento(Estabelecimento estabelecimento) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -705,7 +705,7 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
         return  db.delete(TABLE_MARCA, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    public boolean insertOrUpdateEstabelecimento (Estabelecimento estabelecimento) {
+    public boolean updateEstabelecimento(Estabelecimento estabelecimento, int index) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TABLE_ESTABELECIMENTO_COLUNA_NOME, estabelecimento.getNome());
@@ -730,7 +730,7 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
         return null;
     }
 
-    public boolean removeEstabelecimento(int id) {
+    public boolean deleteEstabelecimento(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "DELETE FROM " + TABLE_ESTABELECIMENTO + " WHERE "
                 + KEY_ID + " = " + id;

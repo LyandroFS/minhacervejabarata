@@ -1,10 +1,14 @@
 package br.com.academico.minhacervejabarata.db;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.academico.minhacervejabarata.R;
@@ -25,12 +29,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,42 +88,89 @@ public class DatabaseDjangoREST implements IDatabase {
         this.estabelecimentoAdapter = estabelecimentoAdapter;
     }
 
+
     @Override
-    public Estabelecimento createEstabelecimento(Estabelecimento estabelecimento) {
+    public boolean updateEstabelecimento(Estabelecimento estabelecimento, final int index) {
 
-        Gson gson = new Gson();
-        Type type = new TypeToken<Estabelecimento>() {}.getType();
-        String json = gson.toJson(estabelecimento, type);
-        System.out.println(json);
-
-        JSONObject jsonObject = new JSONObject();
+        final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", 0);
             jsonObject.put("nome",estabelecimento.getNome());
             jsonObject.put("endereco", estabelecimento.getEndereco());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        String url = "http://caiovosilva.pythonanywhere.com/estabelecimentos/"+estabelecimento.getId()+"/";
+
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonObjectRequest objectRequest = new JsonObjectRequest(
-            Request.Method.POST,
-            "http://caiovosilva.pythonanywhere.com/estabelecimentos/",
-            jsonObject,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Toast toast = Toast.makeText(context, "CERTOOOO:    "+response.toString(),Toast.LENGTH_LONG);
-                    toast.show();
+                Request.Method.PUT,
+                url,
+                jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(response.toString());
+                        Gson gson = new Gson();
+                        Estabelecimento object = gson.fromJson(mJson, Estabelecimento.class);
+
+                        estabelecimentoAdapter.atualizarEstabelecimento(object, index);                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
-                    toast.show();
+        );
+
+        requestQueue.add(objectRequest);
+
+        return false;
+    }
+
+    @Override
+    public Estabelecimento insertEstabelecimento(Estabelecimento estabelecimento) {
+
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("nome",estabelecimento.getNome());
+            jsonObject.put("endereco", estabelecimento.getEndereco());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = "http://caiovosilva.pythonanywhere.com/estabelecimentos/";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast toast = Toast.makeText(context, "CERTOOOO:    "+response.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(response.toString());
+                        Gson gson = new Gson();
+                        Estabelecimento object = gson.fromJson(mJson, Estabelecimento.class);
+
+                        estabelecimentoAdapter.adicionarEstabelecimento(object);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
-            }
         );
 
         requestQueue.add(objectRequest);
@@ -127,6 +180,32 @@ public class DatabaseDjangoREST implements IDatabase {
 
     @Override
     public Estabelecimento getEstabelecimento(int id) {
+
+        String url = "http://caiovosilva.pythonanywhere.com/estabelecimentos/"+id+"/";
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(response.toString());
+                        Gson gson = new Gson();
+                        Estabelecimento object = gson.fromJson(mJson, Estabelecimento.class);
+
+                        estabelecimentoAdapter.adicionarEstabelecimento(object);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+
+    );
+
+        requestQueue.add(objectRequest);
         return null;
     }
 
@@ -188,6 +267,34 @@ public class DatabaseDjangoREST implements IDatabase {
         requestQueue.add(arrayRequest);
         return estabelecimentos;
     }
+
+    @Override
+    public boolean deleteEstabelecimento(int id) {
+
+        String url = "http://caiovosilva.pythonanywhere.com/estabelecimentos/"+id+"/";
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        estabelecimentoAdapter.deleteSuccessful(context);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "Erro ao excluir o cliente: "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+
+        requestQueue.add(stringRequest);
+        return false;
+    }
+
 
     @Override
     public Marca getMarca(int id) {
@@ -290,18 +397,8 @@ public class DatabaseDjangoREST implements IDatabase {
     }
 
     @Override
-    public boolean insertOrUpdateEstabelecimento(Estabelecimento estabelecimento) {
-        return false;
-    }
-
-    @Override
     public Estabelecimento getUltimoEstabelecimentoInserido() {
         return null;
-    }
-
-    @Override
-    public boolean removeEstabelecimento(int id) {
-        return false;
     }
 
     @Override

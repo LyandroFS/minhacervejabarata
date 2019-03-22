@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity
 
 
      /*  Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
-        estabelecimento = db.createEstabelecimento(estabelecimento);
+        estabelecimento = db.insertEstabelecimento(estabelecimento);
 
 
         Estabelecimento estabelecimento2 = new Estabelecimento("Extra", "Paralela");
-        estabelecimento2 = db.createEstabelecimento(estabelecimento2);
+        estabelecimento2 = db.insertEstabelecimento(estabelecimento2);
 
         Log.d("Tag CountSupermercado", "Tag Count: " + db.getAllEstabelecimentos().size());
 

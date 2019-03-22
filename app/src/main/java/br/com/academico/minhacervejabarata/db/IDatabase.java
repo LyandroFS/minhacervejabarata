@@ -17,7 +17,8 @@ public interface IDatabase {
     public EstabelecimentoAdapter getEstabelecimentoAdapter();
     public void setMarcaAdapter(MarcaAdapter marcaAdapter);
     public void setEstabelecimentoAdapter(EstabelecimentoAdapter estabelecimentoAdapter);
-    public Estabelecimento createEstabelecimento(Estabelecimento estabelecimento);
+    public Estabelecimento insertEstabelecimento(Estabelecimento estabelecimento);
+    public boolean updateEstabelecimento(Estabelecimento estabelecimento, int index);
     public Estabelecimento getEstabelecimento(int id);
     public List<Estabelecimento> getAllEstabelecimentos();
     public Marca getMarca(int id);
@@ -40,9 +41,8 @@ public interface IDatabase {
     public boolean insertOrUpdateMarca(Marca marca);
     public Marca getUltimaMarcaInserida();
     public boolean removeMarca(int id);
-    public boolean insertOrUpdateEstabelecimento (Estabelecimento estabelecimento);
     public Estabelecimento getUltimoEstabelecimentoInserido();
-    public boolean removeEstabelecimento(int id);
+    public boolean deleteEstabelecimento(int id);
     public boolean insertOrUpdateTipo (Tipo tipo);
     public Tipo getUltimoTipoInserido();
 

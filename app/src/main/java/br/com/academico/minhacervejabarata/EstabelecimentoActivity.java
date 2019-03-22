@@ -10,7 +10,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
-import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 import br.com.academico.minhacervejabarata.db.IDatabase;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 
@@ -44,15 +42,15 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         configurarRecycler();
 
         Intent intent = getIntent();
-        if(intent.hasExtra("id")){
-            showIncludeCadastro();
-            estabelecimentoEditado = (Estabelecimento) db.getEstabelecimento((int)intent.getSerializableExtra("id"));
+        if(intent.hasExtra("estabelecimento")){
+            estabelecimentoEditado = (Estabelecimento) getIntent().getSerializableExtra("estabelecimento");
             position = (int) intent.getSerializableExtra("index");
 
             EditText txtNome = (EditText)findViewById(R.id.descricaoTxt);
             EditText txtEndereco = (EditText)findViewById(R.id.enderecoTxt);
             txtNome.setText(estabelecimentoEditado.getNome());
             txtEndereco.setText(estabelecimentoEditado.getEndereco());
+            showIncludeCadastro();
         }
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -82,28 +80,21 @@ public class EstabelecimentoActivity extends AppCompatActivity {
 
                 if(estabelecimentoEditado!=null) {
                     estabelecimento.setId(estabelecimentoEditado.getId());
-                    // TO DO PUT HERE
-
-                }
-
-                db.createEstabelecimento(estabelecimento);
-
-                if (db.insertOrUpdateEstabelecimento(estabelecimento)) {
-                    if(estabelecimento.getId()<1) {
-                        estabelecimento = db.getUltimoEstabelecimentoInserido();
-                        adapter.adicionarEstabelecimento(estabelecimento);
-                    }
-                    else{
-                        adapter.atualizarEstabelecimento(estabelecimento, position);
-                    }
-                    nomeText.setText("");
-                    enderecoText.setText("");
-                    Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    db.updateEstabelecimento(estabelecimento, position);
                 }
                 else
-                    Snackbar.make(view, "Erro ao inserir item!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    db.insertEstabelecimento(estabelecimento);
+
+//                if (db.updateEstabelecimento(estabelecimento)) {
+//                    if(estabelecimento.getId()<1) {
+//                        estabelecimento = db.getUltimoEstabelecimentoInserido();
+//                        adapter.adicionarEstabelecimento(estabelecimento);
+//                    }
+//                    else{
+                        adapter.atualizarEstabelecimento(estabelecimento, position);
+//                    }
+
+
                 fecharTeclado();
                 showEstabelecimentos();
             }
@@ -165,5 +156,15 @@ public class EstabelecimentoActivity extends AppCompatActivity {
 
     public void disableProgressBar(){
         findViewById(R.id.note_list_progress).setVisibility(View.INVISIBLE);
+    }
+
+    public void clearTexts(){
+        EditText nomeText = (EditText) findViewById(R.id.descricaoTxt);
+        EditText enderecoText = (EditText) findViewById(R.id.enderecoTxt);
+        nomeText.setText("");
+        enderecoText.setText("");
+
+        Snackbar.make(findViewById(android.R.id.content), "Salvo com sucesso!", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show();
     }
 }

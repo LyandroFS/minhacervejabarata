@@ -2,7 +2,9 @@ package br.com.academico.minhacervejabarata.beans;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Estabelecimento {
+import java.io.Serializable;
+
+public class Estabelecimento implements Serializable {
 
     @SerializedName("id")
     private int id;
