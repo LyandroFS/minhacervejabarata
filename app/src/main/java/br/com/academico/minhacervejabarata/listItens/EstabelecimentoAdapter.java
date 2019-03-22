@@ -13,18 +13,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.List;
 
+import br.com.academico.minhacervejabarata.EstabelecimentoActivity;
 import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 
 public class EstabelecimentoAdapter extends RecyclerView.Adapter<EstabelecimentoHolder> {
-    private final List<Estabelecimento> estabelecimentos;
+    private List<Estabelecimento> estabelecimentos;
+    private EstabelecimentoActivity estabelecimentoActivity;
+    private int lastIndex;
 
-    public EstabelecimentoAdapter(List<Estabelecimento> estabelecimentos){
+    public void setEstabelecimentos(List<Estabelecimento> estabelecimentos) {
         this.estabelecimentos = estabelecimentos;
+        notifyDataSetChanged();
+        estabelecimentoActivity.disableProgressBar();
+    }
+
+    public EstabelecimentoAdapter(List<Estabelecimento> estabelecimentos, EstabelecimentoActivity estabelecimentoActivity){
+        this.estabelecimentos = estabelecimentos;
+        this.estabelecimentoActivity = estabelecimentoActivity;
     }
 
     @NonNull
@@ -36,6 +48,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
 
     @Override
     public void onBindViewHolder(@NonNull EstabelecimentoHolder holder, final int position) {
+        lastIndex = position;
         holder.nome.setText(estabelecimentos.get(position).getNome());
         holder.btnEditar.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -43,7 +56,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
                 Activity activity = getActivity(v);
                 Intent intent = activity.getIntent();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("id", estabelecimentos.get(position).getId());
+                intent.putExtra("estabelecimento", estabelecimentos.get(position));
                 intent.putExtra("index", position);
                 activity.finish();
                 activity.startActivity(intent);
@@ -61,16 +74,9 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Estabelecimento estabelecimento = estabelecimentos.get(position);
-                                DatabaseHelper db = DatabaseHelper.getInstance(view.getContext());
-                                boolean sucesso = db.removeEstabelecimento(estabelecimento.getId());
-                                if(sucesso) {
-                                    removerEstabelecimento(position);
-                                    Snackbar.make(view, "Excluiu!", Snackbar.LENGTH_LONG)
-                                            .setAction("Action", null).show();
-                                }else{
-                                    Snackbar.make(view, "Erro ao excluir o cliente!", Snackbar.LENGTH_LONG)
-                                            .setAction("Action", null).show();
-                                }
+                                IDatabase db = DatabaseDjangoREST.getInstance(view.getContext());
+                                db.deleteEstabelecimento(estabelecimento.getId());
+
                             }
                         })
                         .setNegativeButton("Cancelar", null)
@@ -88,6 +94,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
     public void adicionarEstabelecimento(Estabelecimento estabelecimento){
         estabelecimentos.add(estabelecimento);
         notifyItemInserted(getItemCount());
+        estabelecimentoActivity.clearTexts();
     }
 
     private Activity getActivity(View view) {
@@ -109,5 +116,11 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
     public void atualizarEstabelecimento(Estabelecimento estabelecimento, int index){
         estabelecimentos.set(index, estabelecimento);
         notifyItemChanged(index);
+    }
+
+    public void deleteSuccessful(Context context){
+        removerEstabelecimento(lastIndex);
+        Toast toast = Toast.makeText(context, "Excluido com sucesso! ",Toast.LENGTH_LONG);
+        toast.show();
     }
 }

@@ -18,13 +18,13 @@ import android.view.MenuItem;
 import java.util.Comparator;
 
 import br.com.academico.minhacervejabarata.beans.ProdutoPreco;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 import br.com.academico.minhacervejabarata.listItens.CestaAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DatabaseHelper db;
+    private DatabaseSqlite db;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -38,17 +38,17 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        db = DatabaseHelper.getInstance(getApplicationContext());
+        db = DatabaseSqlite.getInstance(getApplicationContext());
 
 
 
 
      /*  Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
-        estabelecimento = db.createEstabelecimento(estabelecimento);
+        estabelecimento = db.insertEstabelecimento(estabelecimento);
 
 
         Estabelecimento estabelecimento2 = new Estabelecimento("Extra", "Paralela");
-        estabelecimento2 = db.createEstabelecimento(estabelecimento2);
+        estabelecimento2 = db.insertEstabelecimento(estabelecimento2);
 
         Log.d("Tag CountSupermercado", "Tag Count: " + db.getAllEstabelecimentos().size());
 
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        db = DatabaseHelper.getInstance(getApplicationContext());
+        db = DatabaseSqlite.getInstance(getApplicationContext());
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
 
@@ -308,21 +308,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void addCerveja(View view) {
-    }
-
-    public void addEstabelecimento(View view) {
-        Intent intent = new Intent(this, AddEstabelecimentoActivity.class);
-        startActivity(intent);
-    }
-
-    public void addMarca(View view) {
-        //Intent intent = new Intent(this, AddMarcaActivity.class);
-        Intent intent = new Intent(this, MarcaActivity.class);
-
-        startActivity(intent);
     }
 
     class PrecoProdutoComparator implements Comparator<ProdutoPreco> {

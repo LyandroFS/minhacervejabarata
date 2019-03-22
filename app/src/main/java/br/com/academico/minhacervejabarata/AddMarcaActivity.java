@@ -11,11 +11,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import br.com.academico.minhacervejabarata.beans.Marca;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 
 public class AddMarcaActivity extends AppCompatActivity {
 
-    private DatabaseHelper db;
+    private DatabaseSqlite db;
     private EditText nomeText;
     private Marca marca;
     private int position;
@@ -25,7 +25,7 @@ public class AddMarcaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marca);
         nomeText = findViewById(R.id.nomeText);
-        db = DatabaseHelper.getInstance(getApplicationContext());
+        db = DatabaseSqlite.getInstance(getApplicationContext());
         marca = new Marca();
         setTitle("Nova Marca");
 

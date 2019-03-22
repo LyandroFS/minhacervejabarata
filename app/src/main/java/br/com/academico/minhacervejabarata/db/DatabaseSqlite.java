@@ -21,14 +21,14 @@ import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
 
     //Singleton
-    private static DatabaseHelper instancia;
+    private static DatabaseSqlite instancia;
 
-    public static DatabaseHelper getInstance(Context context){
+    public static DatabaseSqlite getInstance(Context context){
         if(instancia == null)
-            instancia = new DatabaseHelper(context);
+            instancia = new DatabaseSqlite(context);
         return instancia;
     }
 
@@ -53,12 +53,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Logcat tag
-    private static final String LOG = "DatabaseHelper";
+    private static final String LOG = "DatabaseSqlite";
 
-    // Database Version
+    // IDatabase Version
     private static final int DATABASE_VERSION = 5;
 
-    // Database Name
+    // IDatabase Name
     private static final String DATABASE_NAME = "minhaCervejaBarata";
 
     // Table Names
@@ -147,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_CESTA_ID + " INTEGER "
             + ")";
 
-    private DatabaseHelper(Context context) {
+    private DatabaseSqlite(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -181,7 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
      * Creating a tipo
      */
-    public Estabelecimento createEstabelecimento(Estabelecimento estabelecimento) {
+    public Estabelecimento insertEstabelecimento(Estabelecimento estabelecimento) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -536,8 +536,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.e(LOG, selectQuery);
 
-//        private DatabaseHelper dbhelper;
-//        dbhelper = new DatabaseHelper();
+//        private DatabaseSqlite dbhelper;
+//        dbhelper = new DatabaseSqlite();
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -705,7 +705,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return  db.delete(TABLE_MARCA, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    public boolean insertOrUpdateEstabelecimento (Estabelecimento estabelecimento/*, long[] tag_ids*/) {
+    public boolean updateEstabelecimento(Estabelecimento estabelecimento, int index) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TABLE_ESTABELECIMENTO_COLUNA_NOME, estabelecimento.getNome());
@@ -730,7 +730,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public boolean removeEstabelecimento(int id) {
+    public boolean deleteEstabelecimento(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "DELETE FROM " + TABLE_ESTABELECIMENTO + " WHERE "
                 + KEY_ID + " = " + id;

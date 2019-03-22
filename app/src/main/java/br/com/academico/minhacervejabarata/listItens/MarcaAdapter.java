@@ -18,7 +18,7 @@ import java.util.List;
 import br.com.academico.minhacervejabarata.AddMarcaActivity;
 import br.com.academico.minhacervejabarata.R;
 import br.com.academico.minhacervejabarata.beans.Marca;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 
 public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
 
@@ -62,7 +62,7 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Marca marca = marcas.get(position);
-                                DatabaseHelper db = DatabaseHelper.getInstance(view.getContext());
+                                DatabaseSqlite db = DatabaseSqlite.getInstance(view.getContext());
                                 if(db.removeMarca(marca.getId())){
                                     removerMarca(position);
                                     Snackbar.make(view, "Excluiu!", Snackbar.LENGTH_LONG)

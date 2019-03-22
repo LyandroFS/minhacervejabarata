@@ -16,13 +16,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.List;
+
 import br.com.academico.minhacervejabarata.beans.Estabelecimento;
-import br.com.academico.minhacervejabarata.db.DatabaseHelper;
+import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 
 public class EstabelecimentoActivity extends AppCompatActivity {
 
-    private DatabaseHelper db;
+    private IDatabase db;
     private RecyclerView recyclerView;
     private EstabelecimentoAdapter adapter;
     private Estabelecimento estabelecimentoEditado = null;
@@ -35,21 +38,20 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        db = DatabaseHelper.getInstance(this);
+        db = DatabaseDjangoREST.getInstance(this);
         configurarRecycler();
 
         Intent intent = getIntent();
-        if(intent.hasExtra("id")){
-            showIncludeCadastro();
-            estabelecimentoEditado = (Estabelecimento) db.getEstabelecimento((int)intent.getSerializableExtra("id"));
+        if(intent.hasExtra("estabelecimento")){
+            estabelecimentoEditado = (Estabelecimento) getIntent().getSerializableExtra("estabelecimento");
             position = (int) intent.getSerializableExtra("index");
 
             EditText txtNome = (EditText)findViewById(R.id.descricaoTxt);
             EditText txtEndereco = (EditText)findViewById(R.id.enderecoTxt);
             txtNome.setText(estabelecimentoEditado.getNome());
             txtEndereco.setText(estabelecimentoEditado.getEndereco());
+            showIncludeCadastro();
         }
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,24 +78,23 @@ public class EstabelecimentoActivity extends AppCompatActivity {
                 String endereco = enderecoText.getText().toString();
                 Estabelecimento estabelecimento = new Estabelecimento(nome,endereco);
 
-                if(estabelecimentoEditado!=null)
+                if(estabelecimentoEditado!=null) {
                     estabelecimento.setId(estabelecimentoEditado.getId());
-                if (db.insertOrUpdateEstabelecimento(estabelecimento)) {
-                    if(estabelecimento.getId()<1) {
-                        estabelecimento = db.getUltimoEstabelecimentoInserido();
-                        adapter.adicionarEstabelecimento(estabelecimento);
-                    }
-                    else{
-                        adapter.atualizarEstabelecimento(estabelecimento, position);
-                    }
-                    nomeText.setText("");
-                    enderecoText.setText("");
-                    Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    db.updateEstabelecimento(estabelecimento, position);
                 }
                 else
-                    Snackbar.make(view, "Erro ao inserir item!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    db.insertEstabelecimento(estabelecimento);
+
+//                if (db.updateEstabelecimento(estabelecimento)) {
+//                    if(estabelecimento.getId()<1) {
+//                        estabelecimento = db.getUltimoEstabelecimentoInserido();
+//                        adapter.adicionarEstabelecimento(estabelecimento);
+//                    }
+//                    else{
+                        adapter.atualizarEstabelecimento(estabelecimento, position);
+//                    }
+
+
                 fecharTeclado();
                 showEstabelecimentos();
             }
@@ -124,7 +125,10 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // Adiciona o adapter que irá anexar os objetos à lista.
-        adapter = new EstabelecimentoAdapter(db.getAllEstabelecimentos());
+        List<Estabelecimento> estabelecimentoList = db.getAllEstabelecimentos();
+        if(estabelecimentoList.size()<1)
+            findViewById(R.id.note_list_progress).setVisibility(View.VISIBLE);
+        adapter = new EstabelecimentoAdapter(estabelecimentoList, this);
         db.setEstabelecimentoAdapter(adapter);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -150,4 +154,17 @@ public class EstabelecimentoActivity extends AppCompatActivity {
         findViewById(R.id.fab).setVisibility(View.VISIBLE);
     }
 
+    public void disableProgressBar(){
+        findViewById(R.id.note_list_progress).setVisibility(View.INVISIBLE);
+    }
+
+    public void clearTexts(){
+        EditText nomeText = (EditText) findViewById(R.id.descricaoTxt);
+        EditText enderecoText = (EditText) findViewById(R.id.enderecoTxt);
+        nomeText.setText("");
+        enderecoText.setText("");
+
+        Snackbar.make(findViewById(android.R.id.content), "Salvo com sucesso!", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show();
+    }
 }
