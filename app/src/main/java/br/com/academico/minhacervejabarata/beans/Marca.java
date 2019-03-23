@@ -1,7 +1,14 @@
 package br.com.academico.minhacervejabarata.beans;
 
-public class Marca {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class Marca implements Serializable {
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("nome")
     private String nome;
 
     public Marca() {

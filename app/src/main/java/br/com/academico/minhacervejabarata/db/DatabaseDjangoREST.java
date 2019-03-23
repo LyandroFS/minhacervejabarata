@@ -47,6 +47,7 @@ public class DatabaseDjangoREST implements IDatabase {
     //Singleton
     private static DatabaseDjangoREST instancia;
     private List<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
+    private List<Marca> marcas = new ArrayList<Marca>();
 
 
     public static DatabaseDjangoREST getInstance(Context context){
@@ -153,9 +154,6 @@ public class DatabaseDjangoREST implements IDatabase {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast toast = Toast.makeText(context, "CERTOOOO:    "+response.toString(),Toast.LENGTH_LONG);
-                        toast.show();
-
                         JsonParser parser = new JsonParser();
                         JsonElement mJson =  parser.parse(response.toString());
                         Gson gson = new Gson();
@@ -302,12 +300,73 @@ public class DatabaseDjangoREST implements IDatabase {
     }
 
     @Override
-    public Marca createMarca(Marca marca) {
+    public Marca insertMarca(Marca marca) {
+
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("nome",marca.getNome());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = "http://caiovosilva.pythonanywhere.com/marcas/";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(response.toString());
+                        Gson gson = new Gson();
+                        Marca object = gson.fromJson(mJson, Marca.class);
+
+                        marcaAdapter.adicionarMarca(object);
+                        Toast toast = Toast.makeText(context, "Salvo com sucesso!",Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+
+        requestQueue.add(objectRequest);
+
         return null;
     }
 
     @Override
     public List<Marca> getAllMarca() {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(
+                "http://caiovosilva.pythonanywhere.com/marcas",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Type listType = new TypeToken<List<Marca>>() {}.getType();
+                        marcas = new Gson().fromJson(String.valueOf(response), listType);
+                        marcaAdapter.setMarcas(marcas);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+
+        requestQueue.add(arrayRequest);
         return null;
     }
 

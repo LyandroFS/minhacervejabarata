@@ -22,7 +22,8 @@ public interface IDatabase {
     public Estabelecimento getEstabelecimento(int id);
     public List<Estabelecimento> getAllEstabelecimentos();
     public Marca getMarca(int id);
-    public Marca createMarca(Marca marca);
+    public boolean insertOrUpdateMarca(Marca marca);
+    public Marca insertMarca(Marca marca);
     public List<Marca> getAllMarca();
     public Tipo createTipo(Tipo tipo);
     public Tipo getTipo(int id);
@@ -38,7 +39,6 @@ public interface IDatabase {
     public List<ItensCesta> getAllItensCesta();
     public List<ItensCesta> getAllItensCestaById(int id);
     public boolean removeItensCesta(int id);
-    public boolean insertOrUpdateMarca(Marca marca);
     public Marca getUltimaMarcaInserida();
     public boolean removeMarca(int id);
     public Estabelecimento getUltimoEstabelecimentoInserido();
