@@ -11,11 +11,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import br.com.academico.minhacervejabarata.beans.Marca;
+import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
 import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 
 public class AddMarcaActivity extends AppCompatActivity {
 
-    private DatabaseSqlite db;
+    private IDatabase db;
     private EditText nomeText;
     private Marca marca;
     private int position;
@@ -25,12 +27,14 @@ public class AddMarcaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_marca);
         nomeText = findViewById(R.id.nomeText);
-        db = DatabaseSqlite.getInstance(getApplicationContext());
+        db = DatabaseDjangoREST.getInstance(getApplicationContext());
         marca = new Marca();
         setTitle("Nova Marca");
 
         Intent intent = getIntent();
         if(intent.hasExtra("marcaId")) {
+
+            // LIMPAR NOMETEXT SE NAO TIVER EXTRA
             int marcaId = (int) intent.getSerializableExtra("marcaId");
             position = (int) intent.getSerializableExtra("index");
             marca = db.getMarca(marcaId);
@@ -42,6 +46,16 @@ public class AddMarcaActivity extends AppCompatActivity {
         String nome = nomeText.getText().toString();
         Handler handler = new Handler();
         marca.setNome(nome);
+
+        db.insertMarca(marca);
+
+        fecharTeclado();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                finish();
+            }
+        }, 1000);   //delay de 1 segundo
+
         if(db.insertOrUpdateMarca(marca)) {
             if(marca.getId()<1) {
                 marca = db.getUltimaMarcaInserida();
@@ -52,12 +66,7 @@ public class AddMarcaActivity extends AppCompatActivity {
             }
             Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            fecharTeclado();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    finish();
-                }
-            }, 1000);   //delay de 1 segundo
+
         }
         else
             Snackbar.make(view, "Erro ao salvar item!", Snackbar.LENGTH_LONG)

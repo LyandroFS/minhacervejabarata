@@ -271,7 +271,7 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
         return marca;
     }
 
-    public Marca createMarca(Marca marca) {
+    public Marca insertMarca(Marca marca) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put(TABLE_MARCA_COLUNA_NOME, marca.getNome());

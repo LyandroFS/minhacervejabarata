@@ -16,15 +16,19 @@ import android.widget.Button;
 import java.util.List;
 
 import br.com.academico.minhacervejabarata.AddMarcaActivity;
+import br.com.academico.minhacervejabarata.MarcaActivity;
 import br.com.academico.minhacervejabarata.R;
+import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 
 public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
 
-    private final List<Marca> marcas;
+    private List<Marca> marcas;
+    private MarcaActivity marcaActivity;
 
-    public MarcaAdapter(List<Marca> marcas) {
+    public MarcaAdapter(List<Marca> marcas, MarcaActivity marcaActivity) {
+        this.marcaActivity = marcaActivity;
         this.marcas = marcas;
     }
 
@@ -112,4 +116,9 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
         notifyItemRemoved(index);
     }
 
+    public void setMarcas(List<Marca> marcas) {
+        this.marcas = marcas;
+        notifyDataSetChanged();
+        marcaActivity.disableProgressBar();
+    }
 }

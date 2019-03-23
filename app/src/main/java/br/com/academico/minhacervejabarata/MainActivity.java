@@ -55,10 +55,10 @@ public class MainActivity extends AppCompatActivity
 
 
           Marca marca1 = new Marca("Skol");
-          marca1 = db.createMarca(marca1);
+          marca1 = db.insertMarca(marca1);
 
           Marca marca2 = new Marca("Devassa");
-            marca2 = db.createMarca(marca2);
+            marca2 = db.insertMarca(marca2);
 
         Log.d("Tag CountMarca", "Tag Count: " + db.getAllMarca().size());
 
