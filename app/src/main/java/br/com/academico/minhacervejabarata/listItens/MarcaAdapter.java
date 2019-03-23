@@ -12,20 +12,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.List;
 
 import br.com.academico.minhacervejabarata.AddMarcaActivity;
 import br.com.academico.minhacervejabarata.MarcaActivity;
 import br.com.academico.minhacervejabarata.R;
-import br.com.academico.minhacervejabarata.beans.Estabelecimento;
 import br.com.academico.minhacervejabarata.beans.Marca;
-import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
+import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 
 public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
 
     private List<Marca> marcas;
     private MarcaActivity marcaActivity;
+    private int lastIndex;
 
     public MarcaAdapter(List<Marca> marcas, MarcaActivity marcaActivity) {
         this.marcaActivity = marcaActivity;
@@ -41,14 +43,16 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
     @Override
     public void onBindViewHolder(MarcaHolder holder, final int position) {
         holder.nomeMarca.setText(marcas.get(position).getNome());
+        lastIndex = position;
 
         holder.btnEditar.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                lastIndex = position;
                 Activity activity = getActivity(v);
                 Intent intent = new Intent(activity, AddMarcaActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                intent.putExtra("marcaId", marcas.get(position).getId());
+                intent.putExtra("marca", marcas.get(position));
                 intent.putExtra("index", position);
                 //activity.finish();
                 activity.startActivity(intent);
@@ -66,15 +70,9 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Marca marca = marcas.get(position);
-                                DatabaseSqlite db = DatabaseSqlite.getInstance(view.getContext());
-                                if(db.removeMarca(marca.getId())){
-                                    removerMarca(position);
-                                    Snackbar.make(view, "Excluiu!", Snackbar.LENGTH_LONG)
-                                            .setAction("Action", null).show();
-                                }else{
-                                    Snackbar.make(view, "Erro ao excluir!", Snackbar.LENGTH_LONG)
-                                            .setAction("Action", null).show();
-                                }
+                                lastIndex = position;
+                                IDatabase db = DatabaseDjangoREST.getInstance(view.getContext());
+                                db.deleteMarca(marca.getId());
                             }
                         })
                         .setNegativeButton("Cancelar", null)
@@ -120,5 +118,11 @@ public class MarcaAdapter extends RecyclerView.Adapter<MarcaHolder> {
         this.marcas = marcas;
         notifyDataSetChanged();
         marcaActivity.disableProgressBar();
+    }
+
+    public void deleteSuccessful(Context context){
+        removerMarca(lastIndex);
+        Toast toast = Toast.makeText(context, "Excluído com sucesso! ",Toast.LENGTH_LONG);
+        toast.show();
     }
 }

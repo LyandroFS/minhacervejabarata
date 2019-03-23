@@ -283,7 +283,7 @@ public class DatabaseDjangoREST implements IDatabase {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast toast = Toast.makeText(context, "Erro ao excluir o cliente: "+error.toString(),Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(context, "Erro: "+error.toString(),Toast.LENGTH_LONG);
                         toast.show();
                     }
                 }
@@ -371,6 +371,76 @@ public class DatabaseDjangoREST implements IDatabase {
     }
 
     @Override
+    public boolean updateMarca(Marca marca, final int index) {
+
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("nome",marca.getNome());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = "http://caiovosilva.pythonanywhere.com/marcas/"+marca.getId()+"/";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(response.toString());
+                        Gson gson = new Gson();
+                        Marca object = gson.fromJson(mJson, Marca.class);
+
+                        marcaAdapter.atualizarMarca(object, index);                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+
+        requestQueue.add(objectRequest);
+
+        return false;
+    }
+
+
+    @Override
+    public boolean deleteMarca(int id) {
+
+        String url = "http://caiovosilva.pythonanywhere.com/marcas/"+id+"/";
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        marcaAdapter.deleteSuccessful(context);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "Erro: "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+
+        requestQueue.add(stringRequest);
+        return false;
+    }
+
+    @Override
     public Tipo createTipo(Tipo tipo) {
         return null;
     }
@@ -441,18 +511,8 @@ public class DatabaseDjangoREST implements IDatabase {
     }
 
     @Override
-    public boolean insertOrUpdateMarca(Marca marca) {
-        return false;
-    }
-
-    @Override
     public Marca getUltimaMarcaInserida() {
         return null;
-    }
-
-    @Override
-    public boolean removeMarca(int id) {
-        return false;
     }
 
     @Override

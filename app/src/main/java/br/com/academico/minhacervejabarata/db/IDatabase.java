@@ -22,7 +22,7 @@ public interface IDatabase {
     public Estabelecimento getEstabelecimento(int id);
     public List<Estabelecimento> getAllEstabelecimentos();
     public Marca getMarca(int id);
-    public boolean insertOrUpdateMarca(Marca marca);
+    public boolean updateMarca(Marca marca,  int index);
     public Marca insertMarca(Marca marca);
     public List<Marca> getAllMarca();
     public Tipo createTipo(Tipo tipo);
@@ -40,7 +40,7 @@ public interface IDatabase {
     public List<ItensCesta> getAllItensCestaById(int id);
     public boolean removeItensCesta(int id);
     public Marca getUltimaMarcaInserida();
-    public boolean removeMarca(int id);
+    public boolean deleteMarca(int id);
     public Estabelecimento getUltimoEstabelecimentoInserido();
     public boolean deleteEstabelecimento(int id);
     public boolean insertOrUpdateTipo (Tipo tipo);

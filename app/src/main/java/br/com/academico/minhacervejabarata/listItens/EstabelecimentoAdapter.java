@@ -48,11 +48,11 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
 
     @Override
     public void onBindViewHolder(@NonNull EstabelecimentoHolder holder, final int position) {
-        lastIndex = position;
         holder.nome.setText(estabelecimentos.get(position).getNome());
         holder.btnEditar.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                lastIndex = position;
                 Activity activity = getActivity(v);
                 Intent intent = activity.getIntent();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -73,6 +73,7 @@ public class EstabelecimentoAdapter extends RecyclerView.Adapter<Estabelecimento
                         .setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                lastIndex = position;
                                 Estabelecimento estabelecimento = estabelecimentos.get(position);
                                 IDatabase db = DatabaseDjangoREST.getInstance(view.getContext());
                                 db.deleteEstabelecimento(estabelecimento.getId());

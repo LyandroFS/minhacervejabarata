@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import br.com.academico.minhacervejabarata.beans.Marca;
 import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
-import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
 import br.com.academico.minhacervejabarata.db.IDatabase;
 
 public class AddMarcaActivity extends AppCompatActivity {
@@ -32,12 +31,9 @@ public class AddMarcaActivity extends AppCompatActivity {
         setTitle("Nova Marca");
 
         Intent intent = getIntent();
-        if(intent.hasExtra("marcaId")) {
-
-            // LIMPAR NOMETEXT SE NAO TIVER EXTRA
-            int marcaId = (int) intent.getSerializableExtra("marcaId");
+        if(intent.hasExtra("marca")) {
+            marca = (Marca) getIntent().getSerializableExtra("marca");
             position = (int) intent.getSerializableExtra("index");
-            marca = db.getMarca(marcaId);
             nomeText.setText(marca.getNome());
         }
     }
@@ -47,7 +43,10 @@ public class AddMarcaActivity extends AppCompatActivity {
         Handler handler = new Handler();
         marca.setNome(nome);
 
-        db.insertMarca(marca);
+        if(marca.getId()<1)
+            db.insertMarca(marca);
+        else
+            db.updateMarca(marca, position);
 
         fecharTeclado();
         handler.postDelayed(new Runnable() {
@@ -55,25 +54,6 @@ public class AddMarcaActivity extends AppCompatActivity {
                 finish();
             }
         }, 1000);   //delay de 1 segundo
-
-        if(db.insertOrUpdateMarca(marca)) {
-            if(marca.getId()<1) {
-                marca = db.getUltimaMarcaInserida();
-                db.getMarcaAdapter().adicionarMarca(marca);
-            }
-            else{
-                db.getMarcaAdapter().atualizarMarca(marca, position);
-            }
-            Snackbar.make(view, "Salvo com sucesso!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-
-        }
-        else
-            Snackbar.make(view, "Erro ao salvar item!", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-
-
-
     }
 
     private void fecharTeclado() {

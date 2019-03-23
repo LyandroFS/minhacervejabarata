@@ -672,7 +672,7 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
     }
 
 
-    public boolean insertOrUpdateMarca(Marca marca) {
+    public boolean updateMarca(Marca marca, int index) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -698,7 +698,7 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
         return null;
     }
 
-    public boolean removeMarca(int id) {
+    public boolean deleteMarca(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "DELETE FROM " + TABLE_MARCA + " WHERE "
                 + KEY_ID + " = " + id;
