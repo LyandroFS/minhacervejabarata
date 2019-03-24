@@ -20,6 +20,7 @@ import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
+import br.com.academico.minhacervejabarata.listItens.TipoAdapter;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -48,6 +49,7 @@ public class DatabaseDjangoREST implements IDatabase {
     private static DatabaseDjangoREST instancia;
     private List<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
     private List<Marca> marcas = new ArrayList<Marca>();
+    private List<Tipo> tipos = new ArrayList<Tipo>();
 
 
     public static DatabaseDjangoREST getInstance(Context context){
@@ -68,6 +70,7 @@ public class DatabaseDjangoREST implements IDatabase {
     //para o crud
     private MarcaAdapter marcaAdapter;
     private EstabelecimentoAdapter estabelecimentoAdapter;
+    private TipoAdapter tipoAdapter;
 
     @Override
     public MarcaAdapter getMarcaAdapter() {
@@ -87,6 +90,11 @@ public class DatabaseDjangoREST implements IDatabase {
     @Override
     public void setEstabelecimentoAdapter(EstabelecimentoAdapter estabelecimentoAdapter) {
         this.estabelecimentoAdapter = estabelecimentoAdapter;
+    }
+
+    @Override
+    public void setTipoAdapter(TipoAdapter tipoAdapter) {
+        this.tipoAdapter = tipoAdapter;
     }
 
 
@@ -441,18 +449,79 @@ public class DatabaseDjangoREST implements IDatabase {
     }
 
     @Override
-    public Tipo createTipo(Tipo tipo) {
-        return null;
-    }
-
-    @Override
     public Tipo getTipo(int id) {
         return null;
     }
 
     @Override
     public List<Tipo> getAllTipo() {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(
+                "http://caiovosilva.pythonanywhere.com/tipos",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Type listType = new TypeToken<List<Tipo>>() {}.getType();
+                        tipos = new Gson().fromJson(String.valueOf(response), listType);
+                        tipoAdapter.setTipos(tipos);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+
+        requestQueue.add(arrayRequest);
         return null;
+    }
+
+    @Override
+    public boolean insertTipo(Tipo tipo) {
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("descricao",tipo.getDescricao());
+            jsonObject.put("ml",tipo.getMl());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = "http://caiovosilva.pythonanywhere.com/tipos/";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(response.toString());
+                        Gson gson = new Gson();
+                        Tipo object = gson.fromJson(mJson, Tipo.class);
+
+                        tipoAdapter.adicionarTipo(object);
+                        Toast toast = Toast.makeText(context, "Salvo com sucesso!",Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(context, "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+
+        requestQueue.add(objectRequest);
+
+        return false;
     }
 
     @Override
@@ -518,11 +587,6 @@ public class DatabaseDjangoREST implements IDatabase {
     @Override
     public Estabelecimento getUltimoEstabelecimentoInserido() {
         return null;
-    }
-
-    @Override
-    public boolean insertOrUpdateTipo(Tipo tipo) {
-        return false;
     }
 
     @Override

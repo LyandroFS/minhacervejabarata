@@ -15,13 +15,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.List;
+
 import br.com.academico.minhacervejabarata.beans.Tipo;
-import br.com.academico.minhacervejabarata.db.DatabaseSqlite;
+import br.com.academico.minhacervejabarata.db.DatabaseDjangoREST;
+import br.com.academico.minhacervejabarata.db.IDatabase;
 import br.com.academico.minhacervejabarata.listItens.TipoAdapter;
 
 public class TipoActivity extends AppCompatActivity {
 
-    DatabaseSqlite db;
+    IDatabase db;
     RecyclerView recyclerView;
     TipoAdapter adapter;
     @Override
@@ -30,7 +33,7 @@ public class TipoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tipo);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        db = DatabaseSqlite.getInstance(this);
+        db = DatabaseDjangoREST.getInstance(this);
         setTitle("Tipo");
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -57,22 +60,11 @@ public class TipoActivity extends AppCompatActivity {
                 EditText mlTxt = (EditText) findViewById(R.id.mlTxt);
                 String descricao = nomeText.getText().toString();
                 Double ml = Double.parseDouble(mlTxt.getText().toString());
-                Tipo tipo = new Tipo(descricao,ml,1);
+                Tipo tipo = new Tipo(descricao,ml);
 
-                boolean sucesso = db.insertOrUpdateTipo(tipo);
-                if(sucesso) {
-                    tipo = db.getUltimoTipoInserido();
-                    adapter.adicionarTipo(tipo);
-                    //limpa os campos
-                    nomeText.setText("");
-                    mlTxt.setText("");
-
-                    Snackbar.make(view, "Salvou!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }else{
-                    Snackbar.make(view, "Erro ao salvar, consulte os logs!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
+                db.insertTipo(tipo);
+                nomeText.setText("");
+                mlTxt.setText("");
                 fecharTeclado();
                 showEstabelecimentos();
             }
@@ -94,7 +86,11 @@ public class TipoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // Adiciona o adapter que irá anexar os objetos à lista.
-        adapter = new TipoAdapter(db.getAllTipo());
+        List<Tipo> tiposList = db.getAllTipo();
+        if(tiposList == null || tiposList.size()<1)
+            findViewById(R.id.note_list_progress).setVisibility(View.VISIBLE);
+        adapter = new TipoAdapter(tiposList, this);
+        db.setTipoAdapter(adapter);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
@@ -119,4 +115,7 @@ public class TipoActivity extends AppCompatActivity {
         findViewById(R.id.fab).setVisibility(View.VISIBLE);
     }
 
+    public void disableProgressBar() {
+        findViewById(R.id.note_list_progress).setVisibility(View.INVISIBLE);
+    }
 }

@@ -10,6 +10,7 @@ import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
+import br.com.academico.minhacervejabarata.listItens.TipoAdapter;
 
 public interface IDatabase {
 
@@ -17,6 +18,7 @@ public interface IDatabase {
     public EstabelecimentoAdapter getEstabelecimentoAdapter();
     public void setMarcaAdapter(MarcaAdapter marcaAdapter);
     public void setEstabelecimentoAdapter(EstabelecimentoAdapter estabelecimentoAdapter);
+    public void setTipoAdapter(TipoAdapter tipoAdapter);
     public Estabelecimento insertEstabelecimento(Estabelecimento estabelecimento);
     public boolean updateEstabelecimento(Estabelecimento estabelecimento, int index);
     public Estabelecimento getEstabelecimento(int id);
@@ -25,7 +27,6 @@ public interface IDatabase {
     public boolean updateMarca(Marca marca,  int index);
     public Marca insertMarca(Marca marca);
     public List<Marca> getAllMarca();
-    public Tipo createTipo(Tipo tipo);
     public Tipo getTipo(int id);
     public List<Tipo> getAllTipo();
     public Produto createProduto(Produto produto);
@@ -43,7 +44,7 @@ public interface IDatabase {
     public boolean deleteMarca(int id);
     public Estabelecimento getUltimoEstabelecimentoInserido();
     public boolean deleteEstabelecimento(int id);
-    public boolean insertOrUpdateTipo (Tipo tipo);
+    public boolean insertTipo(Tipo tipo);
     public Tipo getUltimoTipoInserido();
 
     }

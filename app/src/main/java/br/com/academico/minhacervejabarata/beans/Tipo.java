@@ -4,15 +4,13 @@ public class Tipo {
     private int id;
     private String descricao;
     private double ml;
-    private int qdtEmbalagem;
 
     public Tipo() {
     }
 
-    public Tipo(String descricao, double ml, int qdtEmbalagem) {
+    public Tipo(String descricao, double ml) {
         this.descricao = descricao;
         this.ml = ml;
-        this.qdtEmbalagem = qdtEmbalagem;
     }
 
     public Tipo(int id, String descricao, double ml) {
@@ -43,13 +41,5 @@ public class Tipo {
 
     public void setMl(double ml) {
         this.ml = ml;
-    }
-
-    public int getQdtEmbalagem() {
-        return qdtEmbalagem;
-    }
-
-    public void setQdtEmbalagem(int qdtEmbalagem) {
-        this.qdtEmbalagem = qdtEmbalagem;
     }
 }

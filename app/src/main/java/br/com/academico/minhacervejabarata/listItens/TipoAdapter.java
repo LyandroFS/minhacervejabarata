@@ -6,13 +6,16 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.academico.minhacervejabarata.R;
+import br.com.academico.minhacervejabarata.TipoActivity;
 import br.com.academico.minhacervejabarata.beans.Tipo;
 
 public class TipoAdapter extends RecyclerView.Adapter<TipoHolder> {
 
-    private final List<Tipo> tipos;
+    private List<Tipo> tipos;
+    private TipoActivity tipoActivity;
 
-    public TipoAdapter(List<Tipo> tipos) {
+    public TipoAdapter(List<Tipo> tipos, TipoActivity tipoActivity) {
+        this.tipoActivity = tipoActivity;
         this.tipos = tipos;
     }
 
@@ -35,5 +38,11 @@ public class TipoAdapter extends RecyclerView.Adapter<TipoHolder> {
     public void adicionarTipo(Tipo tipo){
         tipos.add(tipo);
         notifyItemInserted(getItemCount());
+    }
+
+    public void setTipos(List<Tipo> tipos) {
+        this.tipos = tipos;
+        notifyDataSetChanged();
+        tipoActivity.disableProgressBar();
     }
 }

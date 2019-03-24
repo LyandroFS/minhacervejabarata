@@ -20,6 +20,7 @@ import br.com.academico.minhacervejabarata.beans.Produto;
 import br.com.academico.minhacervejabarata.beans.Tipo;
 import br.com.academico.minhacervejabarata.listItens.EstabelecimentoAdapter;
 import br.com.academico.minhacervejabarata.listItens.MarcaAdapter;
+import br.com.academico.minhacervejabarata.listItens.TipoAdapter;
 
 public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
 
@@ -43,6 +44,8 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
     //para o crud
     private MarcaAdapter marcaAdapter;
     private EstabelecimentoAdapter estabelecimentoAdapter;
+    private TipoAdapter tipoAdapter;
+
 
     public EstabelecimentoAdapter getEstabelecimentoAdapter() {
         return estabelecimentoAdapter;
@@ -50,6 +53,11 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
 
     public void setEstabelecimentoAdapter(EstabelecimentoAdapter estabelecimentoAdapter) {
         this.estabelecimentoAdapter = estabelecimentoAdapter;
+    }
+
+    @Override
+    public void setTipoAdapter(TipoAdapter tipoAdapter) {
+        this.tipoAdapter = tipoAdapter;
     }
 
     // Logcat tag
@@ -312,7 +320,7 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
         ContentValues values = new ContentValues();
         values.put(TABLE_TIPO_COLUNA_DESCRICAO, tipo.getDescricao());
         values.put(TABLE_TIPO_COLUNA_ML, tipo.getMl());
-        values.put(TABLE_TIPO_COLUNA_QTD_EMBALAGEM, tipo.getQdtEmbalagem());
+        values.put(TABLE_TIPO_COLUNA_QTD_EMBALAGEM, 1);
 
         // insert row
         Long id = db.insert(TABLE_TIPO, null, values);
@@ -343,7 +351,6 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
         tipo.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         tipo.setDescricao((c.getString(c.getColumnIndex(TABLE_TIPO_COLUNA_DESCRICAO))));
         tipo.setMl((c.getDouble(c.getColumnIndex(TABLE_TIPO_COLUNA_ML))));
-        tipo.setQdtEmbalagem((c.getInt(c.getColumnIndex(TABLE_TIPO_COLUNA_QTD_EMBALAGEM))));
 
         return tipo;
     }
@@ -367,8 +374,6 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 td.setDescricao((c.getString(c.getColumnIndex(TABLE_TIPO_COLUNA_DESCRICAO))));
                 td.setMl((c.getDouble(c.getColumnIndex(TABLE_TIPO_COLUNA_ML))));
-                td.setQdtEmbalagem((c.getInt(c.getColumnIndex(TABLE_TIPO_COLUNA_QTD_EMBALAGEM))));
-
 
                 // adding to Estabelecimento list
                 tipos.add(td);
@@ -737,13 +742,13 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
         return  db.delete(TABLE_ESTABELECIMENTO, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    public boolean insertOrUpdateTipo (Tipo tipo/*, long[] tag_ids*/) {
+    public boolean insertTipo(Tipo tipo/*, long[] tag_ids*/) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(TABLE_TIPO_COLUNA_DESCRICAO, tipo.getDescricao());
         values.put(TABLE_TIPO_COLUNA_ML, tipo.getMl());
-        values.put(TABLE_TIPO_COLUNA_QTD_EMBALAGEM, tipo.getQdtEmbalagem());
+        values.put(TABLE_TIPO_COLUNA_QTD_EMBALAGEM, 1);
 
         if(tipo.getId()>0)
             return db.update(TABLE_TIPO, values, "ID=?", new String[]{ tipo.getId() + "" }) > 0;
@@ -759,7 +764,6 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
             tipo.setId(c.getInt(c.getColumnIndex(KEY_ID)));
             tipo.setDescricao((c.getString(c.getColumnIndex(TABLE_TIPO_COLUNA_DESCRICAO))));
             tipo.setMl((c.getDouble(c.getColumnIndex(TABLE_TIPO_COLUNA_ML))));
-            tipo.setQdtEmbalagem((c.getInt(c.getColumnIndex(TABLE_TIPO_COLUNA_QTD_EMBALAGEM))));
             c.close();
             return tipo;
         }
