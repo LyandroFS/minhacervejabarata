@@ -219,15 +219,17 @@ public class DatabaseSqlite extends SQLiteOpenHelper implements IDatabase {
 
         Cursor c = db.rawQuery(selectQuery, null);
 
-        if (c != null)
+        if (c != null) {
             c.moveToFirst();
 
-        Estabelecimento estabelecimento = new Estabelecimento();
-        estabelecimento.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        estabelecimento.setNome((c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_NOME))));
-        estabelecimento.setEndereco(c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO)));
+            Estabelecimento estabelecimento = new Estabelecimento();
+            estabelecimento.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+            estabelecimento.setNome((c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_NOME))));
+            estabelecimento.setEndereco(c.getString(c.getColumnIndex(TABLE_ESTABELECIMENTO_COLUNA_ENDERECO)));
+            return estabelecimento;
+        }
 
-        return estabelecimento;
+        return null;
     }
 
     public List<Estabelecimento> getAllEstabelecimentos() {

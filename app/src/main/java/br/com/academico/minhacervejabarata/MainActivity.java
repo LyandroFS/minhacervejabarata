@@ -45,44 +45,27 @@ public class MainActivity extends AppCompatActivity
 
      /*  Estabelecimento estabelecimento = new Estabelecimento("Bompreço", "Brotas");
         estabelecimento = db.insertEstabelecimento(estabelecimento);
-
-
         Estabelecimento estabelecimento2 = new Estabelecimento("Extra", "Paralela");
         estabelecimento2 = db.insertEstabelecimento(estabelecimento2);
-
         Log.d("Tag CountSupermercado", "Tag Count: " + db.getAllEstabelecimentos().size());
-
-
-
           Marca marca1 = new Marca("Skol");
           marca1 = db.insertMarca(marca1);
-
           Marca marca2 = new Marca("Devassa");
             marca2 = db.insertMarca(marca2);
-
         Log.d("Tag CountMarca", "Tag Count: " + db.getAllMarca().size());
-
-
         Tipo tipo1 = new Tipo("Garrafa", 600, 12);
         tipo1 = db.createTipo(tipo1);
-
         Tipo tipo2 = new Tipo("Garrafa", 250, 12);
         tipo2 = db.createTipo(tipo2);
-
         Tipo tipo3 = new Tipo("Garrafa", 350, 15);
         tipo3 = db.createTipo(tipo2);
-
         Log.d("Tag CountTipo", "Tag Count: " + db.getAllTipo().size());
-
         Produto produto1 = new Produto(estabelecimento,marca1,tipo1, 5.20f);
         db.createProduto(produto1);
-
         Produto produto2 = new Produto(estabelecimento2,marca2,tipo2, 2.40f);
         db.createProduto(produto2);
-
         Produto produto3 = new Produto(estabelecimento,marca1,tipo3, 3.60f);
         db.createProduto(produto3);
-
         Log.d("Tag CountProduto", "Tag Count: " + db.getAllProduto().size());*/
 
 
@@ -124,7 +107,6 @@ public class MainActivity extends AppCompatActivity
 
       /*  Cesta cesta = new Cesta("Cesta de Final de Semana");
         cesta = db.createCesta(cesta);
-
         Cesta cesta2 = new Cesta("Cesta de Aniversario");
         cesta2 = db.createCesta(cesta2);*/
 
@@ -201,55 +183,39 @@ public class MainActivity extends AppCompatActivity
 
      /*   DecimalFormat formatFloat = new DecimalFormat("0.00");
         DecimalFormat formatDecimal = new DecimalFormat("00");
-
         List<ProdutoPreco> produtoPrecoList =  new ArrayList<>();
-
         for (Cesta cesta : db.getAllCesta()) {
             //Cesta cesta = db.getCesta(4);
             float totalLitrosCesta = 0, totalPrecoCesta = 0,  precoUnitatio=0;
-
             List<ItensCesta> intens =  db.getAllItensCestaById(cesta.getId());
             int quantidade = intens.size();
-
             for (ItensCesta itensCesta : intens) {
                 Produto produto = itensCesta.getProduto();
-
                 float ml = Float.parseFloat(formatDecimal.format(produto.getTipo().getMl()).replace(",",".")) * quantidade;
                 float litro = ml / 1000;
                 float valor = Float.parseFloat(formatFloat.format(produto.getValor()).replace(",",".")) * quantidade;
-
-
                 totalLitrosCesta += litro;
                 totalPrecoCesta += valor;
                 precoUnitatio = Float.parseFloat(formatFloat.format(produto.getValor()).replace(",","."));
-
                 // Log.d("Tag CountItensCesta", "LITRO: " + litro);
-
                *//* Log.d("Tag CountItensCesta", "Tag produto valor: " + ml + " " + formatFloat.format(produto.getValor()));
                Log.d("Tag CountItensCesta", "LITRO: " + litro + " preço por litro: " + valorLitro);
                 Log.d("Tag CountItensCesta", "Valor Total: " + totalPrecoCesta);*//*
-
             }
-
            *//* Log.d("Tag CountItensCesta", "TOTAL LITROS: " + totalLitrosCesta);
             Log.d("Tag CountItensCesta", "TOTAL PRECO: " + totalPrecoCesta);*//*
-
             produtoPrecoList.add(new ProdutoPreco(cesta, totalLitrosCesta, precoUnitatio, totalPrecoCesta));
         }
-
         Collections.sort(produtoPrecoList, new Comparator<ProdutoPreco>() {
             public int compare(ProdutoPreco p1, ProdutoPreco p2) {
                 return Math.round(p1.getValorLitro() - p2.getValorLitro());
             }
         });
-
         Collections.sort(produtoPrecoList, new Comparator<ProdutoPreco>() {
             public int compare(ProdutoPreco p1, ProdutoPreco p2) {
                 return Math.round(p1.getLitros() - p2.getLitros());
             }
         });
-
-
         mAdapter = new ProdutoPrecoAdapter(getApplicationContext(),this,produtoPrecoList);*/
         mAdapter = new CestaAdapter(getApplicationContext(),this,db.getAllCesta());
         mRecyclerView.setAdapter(mAdapter);

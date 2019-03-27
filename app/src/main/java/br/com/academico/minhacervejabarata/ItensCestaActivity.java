@@ -14,6 +14,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +87,8 @@ public class ItensCestaActivity extends AppCompatActivity {
             idCesta.setText(String.valueOf(cesta.getId()));
             nomeCesta.setText(cesta.getNome());
             itensCestaList = db.getAllItensCestaById(extrasBundle.getInt("id"));
+            Log.w("ITENS", ""+itensCestaList.size());
+
             mAdapter = new ItensCestaAdapter(getApplicationContext(),this,itensCestaList, db);
             mRecyclerView.setAdapter(mAdapter);
         }
@@ -86,11 +99,73 @@ public class ItensCestaActivity extends AppCompatActivity {
         DecimalFormat df = new DecimalFormat("0.00");
 
         for(Produto produto : listProdutos){
-            list.add(produto.getMarca().getNome()+", "+produto.getTipo().getDescricao()+" "+df.format(produto.getTipo().getMl())+"ml R$: "+df.format(produto.getValor())+" - "+produto.getEstabelecimento().getNome());
+
+            /*list.add(
+                    produto.getMarca().getNome()+", "+
+                            produto.getTipo().getDescricao()+" "+
+                            df.format(produto.getTipo().getMl())+"ml R$: "+
+                            df.format(produto.getValor())+" - "+
+                            produto.getEstabelecimento().getNome());*/
+
+            list.add(
+                    produto.getIdMarca()+", "+
+                            produto.getIdTipo()+" "+
+                            "ml R$: "+
+                            df.format(produto.getValor())+" - "+
+                            produto.getIdSupermercado());
         }
-        loadSpinnerEstabeleciementos();
-        loadSpinnerMarcas();
-        loadSpinnerTipos();
+        loadSpinnerEstabeleciementosRest();
+        loadSpinnerMarcasRest();
+        loadSpinnerTiposRest();
+    }
+
+    private void loadSpinnerEstabeleciementosRest() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(
+                "http://caiovosilva.pythonanywhere.com/estabelecimentos",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Type listType = new TypeToken<List<Estabelecimento>>() {}.getType();
+
+                        List<String> estabelecimentos = new ArrayList<>();
+
+                        estabelecimentoList = new Gson().fromJson(String.valueOf(response), listType);
+
+                        for(Estabelecimento estabelecimento : estabelecimentoList)
+                            estabelecimentos.add(estabelecimento.getNome());
+
+                        //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ItensCestaActivity.this, android.R.layout.simple_spinner_dropdown_item, estabelecimentos);
+                        ArrayAdapter<String> spinnerArrayAdapter = arrayAdapter;
+                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerSuperpercados.setAdapter(spinnerArrayAdapter);
+
+                        //Método do Spinner para capturar o item selecionado
+                        spinnerSuperpercados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View v, int posicao, long id) {
+                                estabelecimento = estabelecimentoList.get(posicao);
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+        requestQueue.add(arrayRequest);
     }
 
     private void loadSpinnerEstabeleciementos(){
@@ -143,7 +218,6 @@ public class ItensCestaActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View v, int posicao, long id) {
                 marca = marcaList.get(posicao);
-                //Toast.makeText(CestaActivity.this, "Nome Selecionado: " + parent.getItemAtPosition(posicao).toString(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -152,6 +226,106 @@ public class ItensCestaActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void loadSpinnerMarcasRest() {
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(
+                "http://caiovosilva.pythonanywhere.com/marcas",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Type listType = new TypeToken<List<Marca>>() {}.getType();
+
+                        marcaList = new Gson().fromJson(String.valueOf(response), listType);
+                        List<String> marcas = new ArrayList<>();
+
+                        for(Marca marca : marcaList)
+                            marcas.add(marca.getNome());
+
+                        //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ItensCestaActivity.this, android.R.layout.simple_spinner_dropdown_item, marcas);
+                        ArrayAdapter<String> spinnerArrayAdapter = arrayAdapter;
+                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerMarcas.setAdapter(spinnerArrayAdapter);
+
+                        //Método do Spinner para capturar o item selecionado
+                        spinnerMarcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View v, int posicao, long id) {
+                                marca = marcaList.get(posicao);
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+        requestQueue.add(arrayRequest);
+    }
+
+    private void loadSpinnerTiposRest() {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(
+                "http://caiovosilva.pythonanywhere.com/tipos",
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Type listType = new TypeToken<List<Tipo>>() {}.getType();
+
+                        List<String> tipos = new ArrayList<>();
+                        tipoList = new Gson().fromJson(String.valueOf(response), listType);
+
+                        for(Tipo tipo : tipoList)
+                            tipos.add(tipo.getDescricao()+" "+tipo.getMl());
+
+                        //Cria um ArrayAdapter usando um padrão de layout da classe R do android, passando o ArrayList nomes
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ItensCestaActivity.this, android.R.layout.simple_spinner_dropdown_item, tipos);
+                        ArrayAdapter<String> spinnerArrayAdapter = arrayAdapter;
+                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerTipos.setAdapter(spinnerArrayAdapter);
+
+                        //Método do Spinner para capturar o item selecionado
+                        spinnerTipos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View v, int posicao, long id) {
+                                tipo = tipoList.get(posicao);
+                                //Toast.makeText(CestaActivity.this, "Nome Selecionado: " + parent.getItemAtPosition(posicao).toString(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "ERRO:    "+error.toString(),Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+        );
+        requestQueue.add(arrayRequest);
     }
 
     private void loadSpinnerTipos(){
@@ -187,10 +361,11 @@ public class ItensCestaActivity extends AppCompatActivity {
     }
 
     public void addItenCesta(View view) {
-
         if(!preco.getText().toString().isEmpty()) {
+/*
             Log.d("Tag", "Nome Cesta: " + nomeCesta.getText().toString());
             Log.d("Tag", "Valor Produto: " + Float.parseFloat(preco.getText().toString()));
+*/
 
             Produto produto = new Produto(estabelecimento, marca, tipo, Float.parseFloat(preco.getText().toString()));
             ItensCesta itensCesta = new ItensCesta(produto, new Cesta("TESTE TESSTE"));
@@ -206,17 +381,19 @@ public class ItensCestaActivity extends AppCompatActivity {
     }
 
     public void addMoreItenCesta(View view) {
+        if(!preco.getText().toString().isEmpty()) {
+            Produto produto = new Produto(estabelecimento, marca, tipo, Float.parseFloat(preco.getText().toString()));
+            produto = db.createProduto(produto);
+            Cesta cesta = db.getCesta(Integer.parseInt(idCesta.getText().toString()));
 
-        Produto produto = new Produto(estabelecimento, marca, tipo, Float.parseFloat(preco.getText().toString()));
-        produto = db.createProduto(produto);
-        Cesta cesta = db.getCesta(Integer.parseInt(idCesta.getText().toString()));
+            ItensCesta item = new ItensCesta(produto, cesta);
+            db.createItensCesta(item);
 
-        ItensCesta item = new ItensCesta(produto, cesta);
-        db.createItensCesta(item);
-
-        //preco.setText("");
-
-        this.recreate();
-        Toast.makeText(getApplicationContext(),"Novo produto adicionado a cesta!!!",Toast.LENGTH_LONG).show();
+            this.recreate();
+            Toast.makeText(getApplicationContext(),"Novo produto adicionado a cesta!!!",Toast.LENGTH_LONG).show();
+        }else{
+            Snackbar.make(view, "O valor do produto deve ser preenchido", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 }
